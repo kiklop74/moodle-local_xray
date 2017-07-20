@@ -18,6 +18,11 @@ env:
     - MOODLE_BRANCH=MOODLE_30_STABLE
     - MOODLE_BRANCH=MOODLE_31_STABLE
 
+addons:
+  apt:
+    packages:
+    - default-jdk
+
 #matrix:
 # include:
 #  - php: 5.4
@@ -35,6 +40,8 @@ before_install:
   - composer selfupdate
   - composer create-project -n --no-dev --prefer-dist moodlerooms/moodle-plugin-ci ci ^1
   - export PATH="$(cd ci/bin; pwd):$(cd ci/vendor/bin; pwd):$PATH"
+  - sudo apt-get -qq update
+  - sudo apt-get -qq update
   # Trying to adress the intermittent faliure of MySQL server
   # See https://github.com/travis-ci/travis-ci/issues/6842 for details
   - sleep 5
