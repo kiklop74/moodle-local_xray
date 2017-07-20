@@ -35,15 +35,18 @@ before_install:
   - composer selfupdate
   - composer create-project -n --no-dev --prefer-dist moodlerooms/moodle-plugin-ci ci ^1
   - export PATH="$(cd ci/bin; pwd):$(cd ci/vendor/bin; pwd):$PATH"
+  # Trying to adress the intermittent faliure of MySQL server
+  # See https://github.com/travis-ci/travis-ci/issues/6842 for details
+  - sleep 5
 
 install:
   - moodle-plugin-ci add-plugin -b ${AWS_BRANCH} moodlerooms/moodle-local_aws_sdk
   - moodle-plugin-ci add-plugin -b ${MOODLE_BRANCH} moodlerooms/moodle-local_mr
-  - moodle-plugin-ci install
+  - moodle-plugin-ci -vvv install
 
 script:
   - moodle-plugin-ci phplint
-  - moodle-plugin-ci phpcpd
+#  - moodle-plugin-ci phpcpd
 #  - moodle-plugin-ci phpmd
 #  - moodle-plugin-ci codechecker
 #  - moodle-plugin-ci csslint
@@ -51,4 +54,5 @@ script:
 #  - moodle-plugin-ci jshint
 #  - moodle-plugin-ci validate
   - moodle-plugin-ci phpunit
-  - moodle-plugin-ci behat
+  - moodle-plugin-ci -vvv behat
+
