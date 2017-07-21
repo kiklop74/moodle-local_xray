@@ -24,11 +24,6 @@ addons:
     packages:
     - chromium-chromedriver
 
-#java-1.7.0-openjdk-amd64 1071 /usr/lib/jvm/java-1.7.0-openjdk-amd64
-#java-1.8.0-openjdk-amd64 1069 /usr/lib/jvm/java-1.8.0-openjdk-amd64
-#java-8-oracle 1081 /usr/lib/jvm/java-8-oracle
-#java-9-oracle 1091 /usr/lib/jvm/java-9-oracle
-
 #matrix:
 # include:
 #  - php: 5.4
@@ -56,22 +51,16 @@ install:
   - moodle-plugin-ci add-plugin -b ${MOODLE_BRANCH}  moodlerooms/moodle-theme_snap
   - moodle-plugin-ci add-plugin -b ${TOPCOLL_BRANCH} gjb2048/moodle-format_topcoll
   - moodle-plugin-ci install
-  - curl -L -o /home/travis/build/moodle/selenium2.jar http://selenium-release.storage.googleapis.com/2.53/selenium-server-standalone-2.53.1.jar
-  #- moodle-plugin-ci add-config '$CFG->behat_profiles=["default" => ["browser" => "chrome", "wd_host" => "http://localhost:4444/wd/hub", "extensions" => ["Behat\MinkExtension" => ["selenium2" => ["browser" => "chrome"]]]]];'
-  #- cd /home/travis/build/moodle/
-  #- php admin/tool/behat/cli/util.php --enable
-  - xvfb-run -a --server-args="-screen 0 1024x768x24" java -jar /home/travis/build/moodle/selenium2.jar -port 4444 -Dwebdriver.chrome.driver=/usr/lib/chromium-browser/chromedriver > /tmp/access.log 2> /tmp/error.log &
+  #- curl -L -o /home/travis/build/moodle/selenium2.jar http://selenium-release.storage.googleapis.com/2.53/selenium-server-standalone-2.53.1.jar
+  - moodle-plugin-ci add-config '$CFG->behat_profiles=["default" => ["browser" => "chrome", "wd_host" => "http://localhost:4444/wd/hub", "extensions" => ["Behat\MinkExtension" => ["selenium2" => ["browser" => "chrome"]]]]];'
+  - cd /home/travis/build/moodle/
+  - php admin/tool/behat/cli/util.php --enable
+  - xvfb-run -a --server-args="-screen 0 1024x768x24" java -jar /home/travis/build/moodle/selenium.jar -port 4444 -Dwebdriver.chrome.driver=/usr/lib/chromium-browser/chromedriver > /tmp/access.log 2> /tmp/error.log &
   - php -t /home/travis/build/moodle/ -S localhost:8000 > /tmp/php-access.log 2> /tmp/php-error.log &
   - sleep 80
 
 script:
   - moodle-plugin-ci phplint
-#  - moodle-plugin-ci phpcpd
-#  - moodle-plugin-ci phpmd
 #  - moodle-plugin-ci codechecker
-#  - moodle-plugin-ci csslint
-#  - moodle-plugin-ci shifter
-#  - moodle-plugin-ci jshint
-#  - moodle-plugin-ci validate
 #  - moodle-plugin-ci phpunit
   - moodle-plugin-ci behat
