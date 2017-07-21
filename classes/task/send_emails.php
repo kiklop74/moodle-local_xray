@@ -106,8 +106,9 @@ class send_emails extends scheduled_task {
                         }
                     }
 
-                    $sqlsub = "SELECT sub.id, sub.courseid, sub.userid FROM {local_xray_subscribe} AS sub JOIN {course} AS c
-	                   ON sub.courseid = c.id";
+                    $sqlsub = "SELECT sub.id, sub.courseid, sub.userid
+                                 FROM {local_xray_subscribe} sub
+                                 JOIN {course} c ON sub.courseid = c.id";
                     if ($select) {
                         $sqlsub .= " WHERE ".$select;
                     }
