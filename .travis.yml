@@ -15,9 +15,9 @@ env:
     - DB=mysqli
     - MOODLE_START_BEHAT_SERVERS=NO
   matrix:
-    - MOODLE_BRANCH=MOODLE_29_STABLE
-    - MOODLE_BRANCH=MOODLE_30_STABLE
-    - MOODLE_BRANCH=MOODLE_31_STABLE
+    - MOODLE_BRANCH=MOODLE_29_STABLE TOPCOLL_BRANCH=MOODLE_29
+    - MOODLE_BRANCH=MOODLE_30_STABLE TOPCOLL_BRANCH=MOODLE_30
+    - MOODLE_BRANCH=MOODLE_31_STABLE TOPCOLL_BRANCH=MOODLE_31
 
 addons:
   apt:
@@ -50,9 +50,11 @@ before_install:
   - sleep 10
 
 install:
-  - moodle-plugin-ci add-plugin -b ${AWS_BRANCH}    moodlerooms/moodle-local_aws_sdk
-  - moodle-plugin-ci add-plugin -b ${MOODLE_BRANCH} moodlerooms/moodle-local_mr
-  - moodle-plugin-ci add-plugin -b ${MOODLE_BRANCH} moodlerooms/moodle-mod_hsuforum
+  - moodle-plugin-ci add-plugin -b ${AWS_BRANCH}     moodlerooms/moodle-local_aws_sdk
+  - moodle-plugin-ci add-plugin -b ${MOODLE_BRANCH}  moodlerooms/moodle-local_mr
+  - moodle-plugin-ci add-plugin -b ${MOODLE_BRANCH}  moodlerooms/moodle-mod_hsuforum
+  - moodle-plugin-ci add-plugin -b ${TOPCOLL_BRANCH} gjb2048/moodle-format_topcoll
+
   - moodle-plugin-ci install
   - curl -L -o /home/travis/build/moodle/selenium2.jar http://selenium-release.storage.googleapis.com/2.53/selenium-server-standalone-2.53.1.jar
   - moodle-plugin-ci add-config '$CFG->behat_profiles=["default" => ["browser" => "chrome", "wd_host" => "http://localhost:4444/wd/hub", "extensions" => ["Behat\MinkExtension" => ["selenium2" => ["browser" => "chrome"]]]]];'
