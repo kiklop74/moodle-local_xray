@@ -13,6 +13,7 @@ env:
   global:
     - AWS_BRANCH=LEGACY
     - DB=mysqli
+    - MOODLE_START_BEHAT_SERVERS=NO
   matrix:
     - MOODLE_BRANCH=MOODLE_29_STABLE
     - MOODLE_BRANCH=MOODLE_30_STABLE
@@ -55,8 +56,10 @@ install:
   - moodle-plugin-ci add-plugin -b ${MOODLE_BRANCH} moodlerooms/moodle-mod_hsuforum
   - moodle-plugin-ci -vvv install
   - java -version
-  - curl http://localhost:4444/wd/hub/status
-  - curl http://localhost:8000
+  - xvfb-run -a --server-args="-screen 0 1024x768x24" java -jar /home/travis/build/moodle/selenium.jar &
+  - php -S localhost:8000 &
+  - curl -v http://localhost:4444/wd/hub/status
+  - curl -v http://localhost:8000
 
 script:
   - moodle-plugin-ci phplint
