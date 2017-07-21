@@ -19,10 +19,11 @@ env:
     - MOODLE_BRANCH=MOODLE_30_STABLE
     - MOODLE_BRANCH=MOODLE_31_STABLE
 
-#addons:
-#  apt:
-#    packages:
-#    - oracle-java8-installer
+addons:
+  apt:
+    packages:
+    - chromium-chromedriver
+
 #java-1.7.0-openjdk-amd64 1071 /usr/lib/jvm/java-1.7.0-openjdk-amd64
 #java-1.8.0-openjdk-amd64 1069 /usr/lib/jvm/java-1.8.0-openjdk-amd64
 #java-8-oracle 1081 /usr/lib/jvm/java-8-oracle
@@ -37,7 +38,7 @@ env:
 #  - php: 5.4
 #    env: MOODLE_BRANCH=MOODLE_31_STABLE AWS_BRANCH=LEGACY DB=mysqli
 #
-#
+# https://downloads.sourceforge.net/project/ubuntuzilla/mozilla/apt/pool/main/f/firefox-mozilla-build/firefox-mozilla-build_41.0-0ubuntu1_amd64.deb?r=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fubuntuzilla%2Ffiles%2Fmozilla%2Fapt%2Fpool%2Fmain%2Ff%2Ffirefox-mozilla-build%2F&ts=1500641579&use_mirror=ufpr
 
 before_install:
   - phpenv config-rm xdebug.ini
@@ -51,11 +52,13 @@ before_install:
   - sleep 10
 
 install:
+  - apt-cache policy firefox
+  - apt-cache policy chromium-browser
   - moodle-plugin-ci add-plugin -b ${AWS_BRANCH} moodlerooms/moodle-local_aws_sdk
   - moodle-plugin-ci add-plugin -b ${MOODLE_BRANCH} moodlerooms/moodle-local_mr
   - moodle-plugin-ci add-plugin -b ${MOODLE_BRANCH} moodlerooms/moodle-mod_hsuforum
   - moodle-plugin-ci -vvv install
-  - xvfb-run -a --server-args="-screen 0 1024x768x24" java -jar /home/travis/build/moodle/selenium.jar &
+  - xvfb-run -a --server-args="-screen 0 1024x768x24" java -jar /home/travis/build/moodle/selenium.jar -port 4444 &
   - cd /home/travis/build/moodle/
   - php -S localhost:8000 &
   - sleep 80
