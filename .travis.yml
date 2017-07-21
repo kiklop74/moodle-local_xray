@@ -53,11 +53,12 @@ install:
   - moodle-plugin-ci add-plugin -b ${AWS_BRANCH}    moodlerooms/moodle-local_aws_sdk
   - moodle-plugin-ci add-plugin -b ${MOODLE_BRANCH} moodlerooms/moodle-local_mr
   - moodle-plugin-ci add-plugin -b ${MOODLE_BRANCH} moodlerooms/moodle-mod_hsuforum
-  - moodle-plugin-ci -vvv install
+  - moodle-plugin-ci install
+  - curl -L -o /home/travis/build/moodle/selenium2.jar http://selenium-release.storage.googleapis.com/2.53/selenium-server-standalone-2.53.1.jar
   - moodle-plugin-ci add-config '$CFG->behat_profiles=["default" => ["browser" => "chrome", "wd_host" => "http://localhost:4444/wd/hub", "extensions" => ["Behat\MinkExtension" => ["selenium2" => ["browser" => "chrome"]]]]];'
   - cd /home/travis/build/moodle/
   - php admin/tool/behat/cli/util.php --enable
-  - xvfb-run -a --server-args="-screen 0 1024x768x24" java -jar /home/travis/build/moodle/selenium.jar -port 4444 -Dwebdriver.chrome.driver=/usr/lib/chromium-browser/chromedriver &
+  - xvfb-run -a --server-args="-screen 0 1024x768x24" java -jar /home/travis/build/moodle/selenium2.jar -port 4444 -Dwebdriver.chrome.driver=/usr/lib/chromium-browser/chromedriver &
   - php -t /home/travis/build/moodle/ -S localhost:8000 &
   - sleep 80
 
@@ -71,4 +72,4 @@ script:
 #  - moodle-plugin-ci jshint
 #  - moodle-plugin-ci validate
 #  - moodle-plugin-ci phpunit
-  - moodle-plugin-ci -vvv behat
+  - moodle-plugin-ci behat
