@@ -56,7 +56,6 @@ install:
   #- sudo apt-get -y -q purge firefox
   #- curl -L -o /tmp/ff.deb https://downloads.sourceforge.net/project/ubuntuzilla/mozilla/apt/pool/main/f/firefox-mozilla-build/firefox-mozilla-build_40.0.3-0ubuntu1_amd64.deb
   #- sudo gdebi -q -n /tmp/ff.deb
-  - moodle-plugin-ci add-plugin -b ${MOODLE_BRANCH} moodlehq/moodle-behat-extension
   - moodle-plugin-ci add-plugin -b ${AWS_BRANCH}    moodlerooms/moodle-local_aws_sdk
   - moodle-plugin-ci add-plugin -b ${MOODLE_BRANCH} moodlerooms/moodle-local_mr
   - moodle-plugin-ci add-plugin -b ${MOODLE_BRANCH} moodlerooms/moodle-mod_hsuforum
