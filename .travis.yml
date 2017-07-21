@@ -54,10 +54,11 @@ install:
   - moodle-plugin-ci add-plugin -b ${AWS_BRANCH} moodlerooms/moodle-local_aws_sdk
   - moodle-plugin-ci add-plugin -b ${MOODLE_BRANCH} moodlerooms/moodle-local_mr
   - moodle-plugin-ci add-plugin -b ${MOODLE_BRANCH} moodlerooms/moodle-mod_hsuforum
+  - moodle-plugin-ci -vvv install
   - xvfb-run -a --server-args="-screen 0 1024x768x24" java -verbose -jar /home/travis/build/moodle/selenium.jar  > /home/travis/build/moodle/selenium.log &
   - cat /home/travis/build/moodle/selenium.log
   - php -S localhost:8000 &
-  - moodle-plugin-ci -vvv install
+  - sleep 80
   - curl -v http://localhost:4444/wd/hub/status
   - curl -v http://localhost:8000
 
