@@ -23,6 +23,7 @@ addons:
   apt:
     packages:
     - chromium-chromedriver
+    - gdebi-core
 
 #java-1.7.0-openjdk-amd64 1071 /usr/lib/jvm/java-1.7.0-openjdk-amd64
 #java-1.8.0-openjdk-amd64 1069 /usr/lib/jvm/java-1.8.0-openjdk-amd64
@@ -38,7 +39,6 @@ addons:
 #  - php: 5.4
 #    env: MOODLE_BRANCH=MOODLE_31_STABLE AWS_BRANCH=LEGACY DB=mysqli
 #
-# https://downloads.sourceforge.net/project/ubuntuzilla/mozilla/apt/pool/main/f/firefox-mozilla-build/firefox-mozilla-build_41.0-0ubuntu1_amd64.deb?r=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fubuntuzilla%2Ffiles%2Fmozilla%2Fapt%2Fpool%2Fmain%2Ff%2Ffirefox-mozilla-build%2F&ts=1500641579&use_mirror=ufpr
 
 before_install:
   - phpenv config-rm xdebug.ini
@@ -52,8 +52,10 @@ before_install:
   - sleep 10
 
 install:
-  - apt-cache policy firefox
-  - apt-cache policy chromium-browser
+  - sudo apt-get -y -q update
+  - sudo apt-get -y -q purge firefox
+  - curl -L -o /home/travis/build/moodle/ff.deb https://downloads.sourceforge.net/project/ubuntuzilla/mozilla/apt/pool/main/f/firefox-mozilla-build/firefox-mozilla-build_41.0-0ubuntu1_amd64.deb
+  - sudo gdebi -q /home/travis/build/moodle/ff.deb
   - moodle-plugin-ci add-plugin -b ${AWS_BRANCH} moodlerooms/moodle-local_aws_sdk
   - moodle-plugin-ci add-plugin -b ${MOODLE_BRANCH} moodlerooms/moodle-local_mr
   - moodle-plugin-ci add-plugin -b ${MOODLE_BRANCH} moodlerooms/moodle-mod_hsuforum
@@ -62,8 +64,6 @@ install:
   - cd /home/travis/build/moodle/
   - php -S localhost:8000 &
   - sleep 80
-  - curl -v http://localhost:4444/wd/hub/status
-  - curl -v http://localhost:8000/
 
 script:
   - moodle-plugin-ci phplint
