@@ -23,7 +23,7 @@ This plugin is required in order to enable support for exporting data from Moodl
 
 Choose based on the following table:
 
-<table id="aws_sdk_table">
+<table id="aws_sdk_table" style="border: 1px solid black">
   <caption><strong>AWS SDK versions</strong></caption>
   <tr>
     <th>Moodle</th>
@@ -31,18 +31,23 @@ Choose based on the following table:
     <th>AWS repository branch</th>
   </tr>
   <tr>
-    <td>2.9.x - 3.1.x</td>
+    <td>3.1.x</td>
     <td>5.5+</td>
     <td><a href="https://github.com/moodlerooms/moodle-local_aws_sdk/tree/MOODLE_31_STABLE">MOODLE_31_STABLE</a></td>
   </tr>
   <tr>
-    <td>3.2.x+</td>
+    <td>3.2.x</td>
     <td>5.6.5+</td>
     <td><a href="https://github.com/moodlerooms/moodle-local_aws_sdk/tree/MOODLE_32_STABLE">MOODLE_32_STABLE</a></td>
   </tr>
   <tr>
     <td>2.9.x - 3.1.x</td>
     <td>5.4.x</td>
+    <td><a href="https://github.com/moodlerooms/moodle-local_aws_sdk/tree/LEGACY">LEGACY</a></td>
+  </tr>
+  <tr>
+    <td>2.9.x - 3.0.x</td>
+    <td>5.5.x+</td>
     <td><a href="https://github.com/moodlerooms/moodle-local_aws_sdk/tree/LEGACY">LEGACY</a></td>
   </tr>
 </table>

@@ -46,8 +46,6 @@ matrix:
   - php: 7.0
     env: MOODLE_BRANCH=MOODLE_32_STABLE AWS_BRANCH=MOODLE_32_STABLE TOPCOLL_BRANCH=MOODLE_32 MOODLE_CI_VER=2
   - php: 7.1
-    env: MOODLE_BRANCH=MOODLE_31_STABLE AWS_BRANCH=MOODLE_31_STABLE TOPCOLL_BRANCH=MOODLE_31
-  - php: 7.1
     env: MOODLE_BRANCH=MOODLE_32_STABLE AWS_BRANCH=MOODLE_32_STABLE TOPCOLL_BRANCH=MOODLE_32 MOODLE_CI_VER=2
 
 
@@ -57,8 +55,6 @@ before_install:
   - composer selfupdate
   - composer create-project -n --no-dev --prefer-dist moodlerooms/moodle-plugin-ci ci ^${MOODLE_CI_VER}
   - export PATH="$(cd ci/bin; pwd):$(cd ci/vendor/bin; pwd):$PATH"
-  # Trying to adress the intermittent faliure of MySQL server
-  # See https://github.com/travis-ci/travis-ci/issues/6842 for details
   - sleep 10
 
 install:
