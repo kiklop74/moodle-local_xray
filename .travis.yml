@@ -1,0 +1,89 @@
+language: php
+
+sudo: true
+
+php:
+  - 5.4
+  - 5.5
+  - 5.6
+  - 7.0
+  - 7.1
+
+cache:
+  directories:
+    - $HOME/.composer/cache
+
+addons:
+  apt:
+    packages:
+    - chromium-chromedriver
+
+env:
+  global:
+    - MOODLE_START_BEHAT_SERVERS=NO
+    - DB=mysqli
+    - MOODLE_CI_VER=1
+
+matrix:
+ include:
+  - php: 5.4
+    env: MOODLE_BRANCH=MOODLE_29_STABLE AWS_BRANCH=LEGACY TOPCOLL_BRANCH=MOODLE_29
+  - php: 5.4
+    env: MOODLE_BRANCH=MOODLE_30_STABLE AWS_BRANCH=LEGACY TOPCOLL_BRANCH=MOODLE_30
+  - php: 5.4
+    env: MOODLE_BRANCH=MOODLE_31_STABLE AWS_BRANCH=LEGACY TOPCOLL_BRANCH=MOODLE_31
+  - php: 5.5
+    env: MOODLE_BRANCH=MOODLE_29_STABLE AWS_BRANCH=MOODLE_31_STABLE TOPCOLL_BRANCH=MOODLE_29
+  - php: 5.5
+    env: MOODLE_BRANCH=MOODLE_30_STABLE AWS_BRANCH=MOODLE_31_STABLE TOPCOLL_BRANCH=MOODLE_30
+  - php: 5.5
+    env: MOODLE_BRANCH=MOODLE_31_STABLE AWS_BRANCH=MOODLE_31_STABLE TOPCOLL_BRANCH=MOODLE_31
+  - php: 5.6
+    env: MOODLE_BRANCH=MOODLE_29_STABLE AWS_BRANCH=MOODLE_31_STABLE TOPCOLL_BRANCH=MOODLE_29
+  - php: 5.6
+    env: MOODLE_BRANCH=MOODLE_30_STABLE AWS_BRANCH=MOODLE_31_STABLE TOPCOLL_BRANCH=MOODLE_30
+  - php: 5.6
+    env: MOODLE_BRANCH=MOODLE_31_STABLE AWS_BRANCH=MOODLE_31_STABLE TOPCOLL_BRANCH=MOODLE_31
+  - php: 5.6
+    env: MOODLE_BRANCH=MOODLE_32_STABLE AWS_BRANCH=MOODLE_32_STABLE TOPCOLL_BRANCH=MOODLE_32 MOODLE_CI_VER=2
+  - php: 7.0
+    env: MOODLE_BRANCH=MOODLE_30_STABLE AWS_BRANCH=MOODLE_31_STABLE TOPCOLL_BRANCH=MOODLE_30
+  - php: 7.0
+    env: MOODLE_BRANCH=MOODLE_31_STABLE AWS_BRANCH=MOODLE_31_STABLE TOPCOLL_BRANCH=MOODLE_31
+  - php: 7.0
+    env: MOODLE_BRANCH=MOODLE_32_STABLE AWS_BRANCH=MOODLE_32_STABLE TOPCOLL_BRANCH=MOODLE_32 MOODLE_CI_VER=2
+  - php: 7.1
+    env: MOODLE_BRANCH=MOODLE_31_STABLE AWS_BRANCH=MOODLE_31_STABLE TOPCOLL_BRANCH=MOODLE_31
+  - php: 7.1
+    env: MOODLE_BRANCH=MOODLE_32_STABLE AWS_BRANCH=MOODLE_32_STABLE TOPCOLL_BRANCH=MOODLE_32 MOODLE_CI_VER=2
+
+
+before_install:
+  - phpenv config-rm xdebug.ini
+  - cd ../..
+  - composer selfupdate
+  - composer create-project -n --no-dev --prefer-dist moodlerooms/moodle-plugin-ci ci ^${MOODLE_CI_VER}
+  - export PATH="$(cd ci/bin; pwd):$(cd ci/vendor/bin; pwd):$PATH"
+  # Trying to adress the intermittent faliure of MySQL server
+  # See https://github.com/travis-ci/travis-ci/issues/6842 for details
+  - sleep 10
+
+install:
+  - moodle-plugin-ci add-plugin -b ${AWS_BRANCH}     moodlerooms/moodle-local_aws_sdk
+  - moodle-plugin-ci add-plugin -b ${MOODLE_BRANCH}  moodlerooms/moodle-local_mr
+  - moodle-plugin-ci add-plugin -b ${MOODLE_BRANCH}  moodlerooms/moodle-mod_hsuforum
+  - moodle-plugin-ci add-plugin -b ${MOODLE_BRANCH}  moodlerooms/moodle-theme_snap
+  - moodle-plugin-ci add-plugin -b ${TOPCOLL_BRANCH} gjb2048/moodle-format_topcoll
+  - moodle-plugin-ci install
+  - moodle-plugin-ci add-config '$CFG->behat_profiles=["default" => ["browser" => "chrome", "wd_host" => "http://localhost:4444/wd/hub", "extensions" => ["Behat\MinkExtension" => ["selenium2" => ["browser" => "chrome"]]]]];'
+  - cd /home/travis/build/moodle/
+  - php admin/tool/behat/cli/util.php --enable
+  - xvfb-run -a --server-args="-screen 0 1024x768x24" java -jar /home/travis/build/moodle/selenium.jar -port 4444 -Dwebdriver.chrome.driver=/usr/lib/chromium-browser/chromedriver > /tmp/access.log 2> /tmp/error.log &
+  - php -t /home/travis/build/moodle/ -S localhost:8000 > /tmp/php-access.log 2> /tmp/php-error.log &
+  - sleep 80
+
+script:
+  - moodle-plugin-ci phplint
+  - moodle-plugin-ci codechecker
+  - moodle-plugin-ci phpunit
+  - moodle-plugin-ci behat

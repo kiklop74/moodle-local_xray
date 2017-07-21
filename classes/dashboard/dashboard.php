@@ -57,8 +57,7 @@ class dashboard {
             // The object can be empty.
             $resvalidation = (array)$response;
 
-            // We have extra validations. However, the DS team will improve these cases to avoid extra validations.
-            if (!$response || empty($resvalidation) || (isset($resvalidation[0]) && !$resvalidation[0])) {
+            if (!$response || empty($resvalidation)) {
 
                 // Fail response of webservice.
                 api\xrayws::instance()->print_error();

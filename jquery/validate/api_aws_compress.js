@@ -32,10 +32,7 @@ function validate_api_aws_compress(YUI, data) {
             modal: true,
             autoOpen: false,
             width: '90%',
-            draggable: false,
-            classes: {
-                "ui-dialog": "xray-validate"
-            }
+            draggable: false
         });
     };
 
