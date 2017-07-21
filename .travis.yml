@@ -52,14 +52,16 @@ before_install:
   - sleep 10
 
 install:
-  - sudo apt-get -y -q update
-  - sudo apt-get -y -q purge firefox
-  - curl -L -o /tmp/ff.deb https://downloads.sourceforge.net/project/ubuntuzilla/mozilla/apt/pool/main/f/firefox-mozilla-build/firefox-mozilla-build_40.0.3-0ubuntu1_amd64.deb
-  - sudo gdebi -q -n /tmp/ff.deb
-  - moodle-plugin-ci add-plugin -b ${AWS_BRANCH} moodlerooms/moodle-local_aws_sdk
+  #- sudo apt-get -y -q update
+  #- sudo apt-get -y -q purge firefox
+  #- curl -L -o /tmp/ff.deb https://downloads.sourceforge.net/project/ubuntuzilla/mozilla/apt/pool/main/f/firefox-mozilla-build/firefox-mozilla-build_40.0.3-0ubuntu1_amd64.deb
+  #- sudo gdebi -q -n /tmp/ff.deb
+  - moodle-plugin-ci add-plugin -b ${MOODLE_BRANCH} moodlehq/moodle-behat-extension
+  - moodle-plugin-ci add-plugin -b ${AWS_BRANCH}    moodlerooms/moodle-local_aws_sdk
   - moodle-plugin-ci add-plugin -b ${MOODLE_BRANCH} moodlerooms/moodle-local_mr
   - moodle-plugin-ci add-plugin -b ${MOODLE_BRANCH} moodlerooms/moodle-mod_hsuforum
   - moodle-plugin-ci -vvv install
+  - moodle-plugin-ci add-config "$CFG->behat_profiles=['default' => ['browser' => 'chrome', 'wd_host' => 'http://localhost:4444/wd/hub', 'extensions' => ['Behat\MinkExtension' => ['selenium2' => ['browser' => 'chrome']]]]];"
   - xvfb-run -a --server-args="-screen 0 1024x768x24" java -jar /home/travis/build/moodle/selenium.jar -port 4444 &
   - cd /home/travis/build/moodle/
   - php -S localhost:8000 &
@@ -74,5 +76,5 @@ script:
 #  - moodle-plugin-ci shifter
 #  - moodle-plugin-ci jshint
 #  - moodle-plugin-ci validate
-  - moodle-plugin-ci phpunit
+#  - moodle-plugin-ci phpunit
   - moodle-plugin-ci -vvv behat
