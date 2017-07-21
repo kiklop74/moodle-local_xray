@@ -45,7 +45,7 @@ before_install:
   - composer selfupdate
   - composer create-project -n --no-dev --prefer-dist moodlerooms/moodle-plugin-ci ci ^1
   - export PATH="$(cd ci/bin; pwd):$(cd ci/vendor/bin; pwd):$PATH"
-  - jdk_switcher use oraclejdk8
+  #- jdk_switcher use oraclejdk8
   # Trying to adress the intermittent faliure of MySQL server
   # See https://github.com/travis-ci/travis-ci/issues/6842 for details
   - sleep 10
@@ -55,12 +55,12 @@ install:
   - moodle-plugin-ci add-plugin -b ${MOODLE_BRANCH} moodlerooms/moodle-local_mr
   - moodle-plugin-ci add-plugin -b ${MOODLE_BRANCH} moodlerooms/moodle-mod_hsuforum
   - moodle-plugin-ci -vvv install
-  - xvfb-run -a --server-args="-screen 0 1024x768x24" java -verbose -jar /home/travis/build/moodle/selenium.jar  > /home/travis/build/moodle/selenium.log &
-  - cat /home/travis/build/moodle/selenium.log
+  - xvfb-run -a --server-args="-screen 0 1024x768x24" java -jar /home/travis/build/moodle/selenium.jar &
+  - cd /home/travis/build/moodle/
   - php -S localhost:8000 &
   - sleep 80
   - curl -v http://localhost:4444/wd/hub/status
-  - curl -v http://localhost:8000
+  - curl -v http://localhost:8000/
 
 script:
   - moodle-plugin-ci phplint
@@ -73,4 +73,3 @@ script:
 #  - moodle-plugin-ci validate
   - moodle-plugin-ci phpunit
   - moodle-plugin-ci -vvv behat
-
