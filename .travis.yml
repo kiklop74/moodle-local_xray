@@ -54,8 +54,8 @@ before_install:
 install:
   - sudo apt-get -y -q update
   - sudo apt-get -y -q purge firefox
-  - curl -L -o /home/travis/build/moodle/ff.deb https://downloads.sourceforge.net/project/ubuntuzilla/mozilla/apt/pool/main/f/firefox-mozilla-build/firefox-mozilla-build_41.0-0ubuntu1_amd64.deb
-  - sudo gdebi -q /home/travis/build/moodle/ff.deb
+  - curl -L -o /tmp/ff.deb https://downloads.sourceforge.net/project/ubuntuzilla/mozilla/apt/pool/main/f/firefox-mozilla-build/firefox-mozilla-build_41.0-0ubuntu1_amd64.deb
+  - sudo gdebi -q /tmp/ff.deb
   - moodle-plugin-ci add-plugin -b ${AWS_BRANCH} moodlerooms/moodle-local_aws_sdk
   - moodle-plugin-ci add-plugin -b ${MOODLE_BRANCH} moodlerooms/moodle-local_mr
   - moodle-plugin-ci add-plugin -b ${MOODLE_BRANCH} moodlerooms/moodle-mod_hsuforum
