@@ -69,10 +69,10 @@ install:
   - moodle-plugin-ci add-plugin -b ${MOODLE_BRANCH}  moodlerooms/moodle-local_mr
   - moodle-plugin-ci add-plugin -b ${MOODLE_BRANCH}  moodlerooms/moodle-mod_hsuforum
   - moodle-plugin-ci add-plugin -b ${MOODLE_BRANCH}  moodlerooms/moodle-theme_snap
-  - moodle-plugin-ci add-plugin -b ${MOODLE_BRANCH}  moodlerooms/moodle-theme_flexpage
-  - moodle-plugin-ci add-plugin -b ${MOODLE_BRANCH}  moodlerooms/moodle-block_flexpagenav
-  - moodle-plugin-ci add-plugin -b ${MOODLE_BRANCH}  moodlerooms/moodle-block_flexpagemod
-  - moodle-plugin-ci add-plugin -b ${MOODLE_BRANCH}  moodlerooms/moodle-format_flexpage
+  #- moodle-plugin-ci add-plugin -b ${MOODLE_BRANCH}  moodlerooms/moodle-block_flexpagenav
+  #- moodle-plugin-ci add-plugin -b ${MOODLE_BRANCH}  moodlerooms/moodle-block_flexpagemod
+  #- moodle-plugin-ci add-plugin -b ${MOODLE_BRANCH}  moodlerooms/moodle-format_flexpage
+  #- moodle-plugin-ci add-plugin -b ${MOODLE_BRANCH}  moodlerooms/moodle-theme_flexpage
   - moodle-plugin-ci add-plugin -b ${TOPCOLL_BRANCH} gjb2048/moodle-format_topcoll
   - moodle-plugin-ci install
   #- moodle-plugin-ci add-config '$CFG->behat_profiles=["default" => ["browser" => "chrome", "wd_host" => "http://localhost:4444/wd/hub", "extensions" => ["Behat\MinkExtension" => ["selenium2" => ["browser" => "chrome"]]]]];'
