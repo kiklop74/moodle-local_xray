@@ -16,8 +16,8 @@ env:
     - MOODLE_START_BEHAT_SERVERS=NO
     - DB=mysqli
     - MOODLE_CI_VER=1
-    - MOODLE_DIR=$(/bin/readlink -fn "$TRAVIS_BUILD_DIR/../../moodle")
-    - MOODLE_SELENIUM_JAR=$(/bin/readlink -fn "$TRAVIS_BUILD_DIR/../../moodle/selenium.jar")
+    - MOODLE_DIR=/home/travis/build/moodle
+    - MOODLE_SELENIUM_JAR=/home/travis/build/moodle/selenium.jar
 
 matrix:
  include:
