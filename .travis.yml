@@ -74,6 +74,7 @@ install:
   - xvfb-run -a --server-args='-screen 0 1024x768x24' java -Dwebdriver.gecko.driver=/usr/local/bin/geckodriver -jar ${MOODLE_SELENIUM3_JAR} -log /tmp/selenium.log &
   - php -t ${MOODLE_DIR} -S localhost:8000 > /tmp/php-access.log 2> /tmp/php-error.log &
   #- cd ${MOODLE_DIR}
+  - sleep 30s
 
 script:
   #- moodle-plugin-ci phplint
