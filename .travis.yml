@@ -16,7 +16,7 @@ env:
     #- MOODLE_START_BEHAT_SERVERS=NO
     - DB=mysqli
     - MOODLE_CI_VER=1
-    - MOODLE_SELENIUM_JAR=$(readlink -f "$TRAVIS_BUILD_DIR/../../moodle/selenium.jar")
+    - MOODLE_SELENIUM_JAR2=$(/bin/readlink -en "$TRAVIS_BUILD_DIR/../../moodle/selenium.jar")
 
 matrix:
  include:
@@ -56,6 +56,7 @@ before_install:
   - composer selfupdate
   - composer create-project -n --no-dev --prefer-dist moodlerooms/moodle-plugin-ci ci ^${MOODLE_CI_VER}
   - export PATH="$(cd ci/bin; pwd):$(cd ci/vendor/bin; pwd):$PATH"
+  - echo "$MOODLE_SELENIUM_JAR2"
   - sleep 10
 
 install:
