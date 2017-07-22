@@ -72,4 +72,4 @@ script:
   #- moodle-plugin-ci phplint
   #- moodle-plugin-ci codechecker
   #- moodle-plugin-ci phpunit
-  - moodle-plugin-ci -vvv behat --start-servers --jar="$TRAVIS_BUILD_DIR/../../moodle/selenium.jar --port 4444"
+  - moodle-plugin-ci -vvv behat --start-servers --jar="$TRAVIS_BUILD_DIR/../../moodle/selenium.jar"
