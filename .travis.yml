@@ -13,10 +13,11 @@ addons:
 
 env:
   global:
-    #- MOODLE_START_BEHAT_SERVERS=NO
+    - MOODLE_START_BEHAT_SERVERS=NO
     - DB=mysqli
     - MOODLE_CI_VER=1
-    - MOODLE_SELENIUM_JAR2=$(/bin/readlink -en "$TRAVIS_BUILD_DIR/../../moodle/selenium.jar")
+    - MOODLE_DIR=$(/bin/readlink -en "$TRAVIS_BUILD_DIR/../../moodle")
+    - MOODLE_SELENIUM_JAR=$(/bin/readlink -en "$TRAVIS_BUILD_DIR/../../moodle/selenium.jar")
 
 matrix:
  include:
@@ -66,11 +67,11 @@ install:
   - moodle-plugin-ci add-plugin -b ${MOODLE_BRANCH}  moodlerooms/moodle-theme_snap
   - moodle-plugin-ci add-plugin -b ${TOPCOLL_BRANCH} gjb2048/moodle-format_topcoll
   - moodle-plugin-ci install
-  #- xvfb-run -a --server-args="-screen 0 1024x768x24" java -jar /home/travis/build/moodle/selenium.jar -port 4444 -log /tmp/selenium.log &
-  #- php -t /home/travis/build/moodle/ -S localhost:8000 > /tmp/php-access.log 2> /tmp/php-error.log &
+  - xvfb-run -a --server-args="-screen 0 1024x768x24" java -jar ${MOODLE_SELENIUM_JAR} -port 4444 -log /tmp/selenium.log &
+  - php -t ${MOODLE_DIR} -S localhost:8000 > /tmp/php-access.log 2> /tmp/php-error.log &
 
 script:
   #- moodle-plugin-ci phplint
   #- moodle-plugin-ci codechecker
   #- moodle-plugin-ci phpunit
-  - moodle-plugin-ci behat -vvv --start-servers --auto-rerun=0
+  - moodle-plugin-ci behat -vvv --auto-rerun=0
