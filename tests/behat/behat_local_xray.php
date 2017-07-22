@@ -140,8 +140,8 @@ class behat_local_xray extends behat_base {
         }
 
         // Test express theme only when present.
-        $plugins = \core_plugin_manager::instance()->get_enabled_plugins('theme');
-        if (!empty($plugins) and in_array('express', $plugins)) {
+        $plugins = \core_plugin_manager::instance()->get_installed_plugins('theme');
+        if (in_array('express', $plugins)) {
             // Test express templates.
             // Add express template.
             if (get_config('core', 'theme') != 'express') {
