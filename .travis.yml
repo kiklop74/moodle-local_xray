@@ -9,8 +9,8 @@ cache:
 addons:
   apt:
     packages:
-    - chromium-chromedriver
-    - gdebi-core
+    #- chromium-chromedriver
+    - firefox=28.0+build2-0ubuntu2
 
 env:
   global:
@@ -51,12 +51,7 @@ matrix:
 
 
 before_install:
-  #- curl -L -s -o /tmp/ff.deb https://sourceforge.net/projects/ubuntuzilla/files/mozilla/apt/pool/main/f/firefox-mozilla-build/firefox-mozilla-build_40.0.3-0ubuntu1_amd64.deb/download
-  #- sudo gdebi -q -n /tmp/ff.deb
-  - sudo apt-get purge firefox
   - sudo apt-get install -y -q firefox=28.0+build2-0ubuntu2
-  - sudo updatedb
-  - locate firefox
   - phpenv config-rm xdebug.ini
   - cd ../..
   - composer selfupdate
@@ -68,23 +63,17 @@ before_install:
 # https://seleniumhq.github.io/selenium/docs/api/java/constant-values.html#org.openqa.selenium.firefox.FirefoxOptions.FIREFOX_OPTIONS
 # For specific firefox settings with regards to override
 # -Dwebdriver.firefox.bin=/opt/firefox/firefox
+#  -Dwebdriver.chrome.driver=/usr/lib/chromium-browser/chromedriver
 
 install:
   - moodle-plugin-ci add-plugin -b ${AWS_BRANCH}     moodlerooms/moodle-local_aws_sdk
   - moodle-plugin-ci add-plugin -b ${MOODLE_BRANCH}  moodlerooms/moodle-local_mr
   - moodle-plugin-ci add-plugin -b ${MOODLE_BRANCH}  moodlerooms/moodle-mod_hsuforum
   - moodle-plugin-ci add-plugin -b ${MOODLE_BRANCH}  moodlerooms/moodle-theme_snap
-  #- moodle-plugin-ci add-plugin -b ${MOODLE_BRANCH}  moodlerooms/moodle-block_flexpagenav
-  #- moodle-plugin-ci add-plugin -b ${MOODLE_BRANCH}  moodlerooms/moodle-block_flexpagemod
-  #- moodle-plugin-ci add-plugin -b ${MOODLE_BRANCH}  moodlerooms/moodle-format_flexpage
-  #- moodle-plugin-ci add-plugin -b ${MOODLE_BRANCH}  moodlerooms/moodle-theme_flexpage
   - moodle-plugin-ci add-plugin -b ${TOPCOLL_BRANCH} gjb2048/moodle-format_topcoll
   - moodle-plugin-ci install
-  #- moodle-plugin-ci add-config '$CFG->behat_profiles=["default" => ["browser" => "chrome", "wd_host" => "http://localhost:4444/wd/hub", "extensions" => ["Behat\MinkExtension" => ["selenium2" => ["browser" => "chrome"]]]]];'
-  #- cd /home/travis/build/moodle/
-  #- php admin/tool/behat/cli/util.php --enable
-  - xvfb-run -a --server-args="-screen 0 1024x768x24" java -jar /home/travis/build/moodle/selenium.jar -port 4444 -Dwebdriver.chrome.driver=/usr/lib/chromium-browser/chromedriver -Dwebdriver.firefox.bin=/usr/bin/firefox > /tmp/access.log 2> /tmp/error.log &
-  - php -t /home/travis/build/moodle/ -S localhost:8000 > /tmp/php-access.log 2> /tmp/php-error.log &
+  #- xvfb-run -a --server-args="-screen 0 1024x768x24" java -jar /home/travis/build/moodle/selenium.jar -port 4444 > /tmp/access.log 2> /tmp/error.log &
+  #- php -t /home/travis/build/moodle/ -S localhost:8000 > /tmp/php-access.log 2> /tmp/php-error.log &
   - sleep 80
 
 script:
