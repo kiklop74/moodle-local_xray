@@ -6,10 +6,10 @@ cache:
   directories:
     - $HOME/.composer/cache
 
-addons:
-  apt:
-    packages:
-    - firefox=28.0+build2-0ubuntu2
+#addons:
+#  apt:
+#    packages:
+#    - firefox=28.0+build2-0ubuntu2
 
 env:
   global:
@@ -57,6 +57,7 @@ before_install:
   - composer selfupdate
   - composer create-project -n --no-dev --prefer-dist moodlerooms/moodle-plugin-ci ci ^${MOODLE_CI_VER}
   - export PATH="$(cd ci/bin; pwd):$(cd ci/vendor/bin; pwd):$PATH"
+  - curl -L -s -o ${MOODLE_DIR}/selenium3.jar http://selenium-release.storage.googleapis.com/3.1/selenium-server-standalone-3.1.0.jar
   - sleep 10
 
 install:
@@ -66,12 +67,13 @@ install:
   - moodle-plugin-ci add-plugin -b ${MOODLE_BRANCH}  moodlerooms/moodle-theme_snap
   - moodle-plugin-ci add-plugin -b ${TOPCOLL_BRANCH} gjb2048/moodle-format_topcoll
   - moodle-plugin-ci install
-  - xvfb-run -a --server-args='-screen 0 1024x768x24' java -jar ${MOODLE_SELENIUM_JAR} -log /tmp/selenium.log -Dwebdriver.firefox.bin=/usr/bin/firefox &
+  #- xvfb-run -a --server-args='-screen 0 1024x768x24' java -jar ${MOODLE_SELENIUM_JAR} -log /tmp/selenium.log -Dwebdriver.firefox.bin=/usr/bin/firefox &
+  - xvfb-run -a --server-args='-screen 0 1024x768x24' java -jar ${MOODLE_DIR}/selenium3.jar -log /tmp/selenium.log &
   - php -t ${MOODLE_DIR} -S localhost:8000 > /tmp/php-access.log 2> /tmp/php-error.log &
-  - cd ${MOODLE_DIR}
+  #- cd ${MOODLE_DIR}
 
 script:
   #- moodle-plugin-ci phplint
   #- moodle-plugin-ci codechecker
   #- moodle-plugin-ci phpunit
-  - moodle-plugin-ci behat --auto-rerun=0
+  - moodle-plugin-ci behat --moodle=${MOODLE_DIR} --auto-rerun=0
