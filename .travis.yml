@@ -71,14 +71,10 @@ install:
   - curl -L -s -o /tmp/geckodriver.tar.gz https://github.com/mozilla/geckodriver/releases/download/v0.18.0/geckodriver-v0.18.0-linux64.tar.gz
   - sudo tar -C /usr/local/bin/ -xzf /tmp/geckodriver.tar.gz
   #- xvfb-run -a --server-args='-screen 0 1024x768x24' java -jar ${MOODLE_SELENIUM_JAR} -log /tmp/selenium.log -Dwebdriver.firefox.bin=/usr/bin/firefox &
-  - xvfb-run -a --server-args="-screen 0 1024x768x24" java -Dwebdriver.gecko.driver=/usr/local/bin/geckodriver -jar ${MOODLE_SELENIUM3_JAR} -log /tmp/selenium.log &
+  - xvfb-run -a --server-args="-screen 0 1024x768x24" java -Dwebdriver.gecko.driver=/usr/local/bin/geckodriver -Dwebdriver.firefox.bin=/usr/local/bin/firefox -Dwebdriver.firefox.marionette=1 -jar ${MOODLE_SELENIUM3_JAR} -log /tmp/selenium.log &
   - php -t ${MOODLE_DIR} -S localhost:8000 > /tmp/php-access.log 2> /tmp/php-error.log &
   #- cd ${MOODLE_DIR}
   - sleep 30s
-  - sudo updatedb
-  - locate firefox
-  - locate geckodriver
-  - locate selenium
   - curl -v http://localhost:4444/wd/hub/status
 
 script:
