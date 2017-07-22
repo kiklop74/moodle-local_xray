@@ -9,7 +9,6 @@ cache:
 addons:
   apt:
     packages:
-    #- chromium-chromedriver
     - firefox=28.0+build2-0ubuntu2
 
 env:
@@ -51,7 +50,6 @@ matrix:
 
 
 before_install:
-  - sudo apt-get install -y -q firefox=28.0+build2-0ubuntu2
   - phpenv config-rm xdebug.ini
   - cd ../..
   - composer selfupdate
@@ -59,18 +57,13 @@ before_install:
   - export PATH="$(cd ci/bin; pwd):$(cd ci/vendor/bin; pwd):$PATH"
   - sleep 10
 
-# See
-# https://seleniumhq.github.io/selenium/docs/api/java/constant-values.html#org.openqa.selenium.firefox.FirefoxOptions.FIREFOX_OPTIONS
-# For specific firefox settings with regards to override
-# -Dwebdriver.firefox.bin=/opt/firefox/firefox
-#  -Dwebdriver.chrome.driver=/usr/lib/chromium-browser/chromedriver
-
 install:
   - moodle-plugin-ci add-plugin -b ${AWS_BRANCH}     moodlerooms/moodle-local_aws_sdk
   - moodle-plugin-ci add-plugin -b ${MOODLE_BRANCH}  moodlerooms/moodle-local_mr
   - moodle-plugin-ci add-plugin -b ${MOODLE_BRANCH}  moodlerooms/moodle-mod_hsuforum
   - moodle-plugin-ci add-plugin -b ${MOODLE_BRANCH}  moodlerooms/moodle-theme_snap
   - moodle-plugin-ci add-plugin -b ${TOPCOLL_BRANCH} gjb2048/moodle-format_topcoll
+  - cd /home/travis/build/moodle/
   - moodle-plugin-ci install
   #- xvfb-run -a --server-args="-screen 0 1024x768x24" java -jar /home/travis/build/moodle/selenium.jar -port 4444 > /tmp/access.log 2> /tmp/error.log &
   #- php -t /home/travis/build/moodle/ -S localhost:8000 > /tmp/php-access.log 2> /tmp/php-error.log &
