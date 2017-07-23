@@ -12,8 +12,6 @@ env:
   global:
     - DB=mysqli
     - MOODLE_CI_VER=1
-    - MOODLE_DIR=/home/travis/build/moodle
-    - MOODLE_SELENIUM_JAR=/home/travis/build/moodle/selenium.jar
 
 matrix:
  include:
@@ -21,30 +19,30 @@ matrix:
     env: MOODLE_BRANCH=MOODLE_29_STABLE AWS_BRANCH=LEGACY TOPCOLL_BRANCH=MOODLE_29
   - php: 5.4
     env: MOODLE_BRANCH=MOODLE_30_STABLE AWS_BRANCH=LEGACY TOPCOLL_BRANCH=MOODLE_30
-  - php: 5.4
-    env: MOODLE_BRANCH=MOODLE_31_STABLE AWS_BRANCH=LEGACY TOPCOLL_BRANCH=MOODLE_31
-  - php: 5.5
-    env: MOODLE_BRANCH=MOODLE_29_STABLE AWS_BRANCH=LEGACY TOPCOLL_BRANCH=MOODLE_29
-  - php: 5.5
-    env: MOODLE_BRANCH=MOODLE_30_STABLE AWS_BRANCH=LEGACY TOPCOLL_BRANCH=MOODLE_30
-  - php: 5.5
-    env: MOODLE_BRANCH=MOODLE_31_STABLE AWS_BRANCH=MOODLE_31_STABLE TOPCOLL_BRANCH=MOODLE_31
-  - php: 5.6
-    env: MOODLE_BRANCH=MOODLE_29_STABLE AWS_BRANCH=LEGACY TOPCOLL_BRANCH=MOODLE_29
-  - php: 5.6
-    env: MOODLE_BRANCH=MOODLE_30_STABLE AWS_BRANCH=LEGACY TOPCOLL_BRANCH=MOODLE_30
-  - php: 5.6
-    env: MOODLE_BRANCH=MOODLE_31_STABLE AWS_BRANCH=MOODLE_31_STABLE TOPCOLL_BRANCH=MOODLE_31
-  - php: 5.6
-    env: MOODLE_BRANCH=MOODLE_32_STABLE AWS_BRANCH=MOODLE_32_STABLE TOPCOLL_BRANCH=MOODLE_32
-  - php: 7.0
-    env: MOODLE_BRANCH=MOODLE_30_STABLE AWS_BRANCH=LEGACY TOPCOLL_BRANCH=MOODLE_30
-  - php: 7.0
-    env: MOODLE_BRANCH=MOODLE_31_STABLE AWS_BRANCH=MOODLE_31_STABLE TOPCOLL_BRANCH=MOODLE_31
-  - php: 7.0
-    env: MOODLE_BRANCH=MOODLE_32_STABLE AWS_BRANCH=MOODLE_32_STABLE TOPCOLL_BRANCH=MOODLE_32
-  - php: 7.1
-    env: MOODLE_BRANCH=MOODLE_32_STABLE AWS_BRANCH=MOODLE_32_STABLE TOPCOLL_BRANCH=MOODLE_32
+  #- php: 5.4
+  #  env: MOODLE_BRANCH=MOODLE_31_STABLE AWS_BRANCH=LEGACY TOPCOLL_BRANCH=MOODLE_31
+  #- php: 5.5
+  #  env: MOODLE_BRANCH=MOODLE_29_STABLE AWS_BRANCH=LEGACY TOPCOLL_BRANCH=MOODLE_29
+  #- php: 5.5
+  #  env: MOODLE_BRANCH=MOODLE_30_STABLE AWS_BRANCH=LEGACY TOPCOLL_BRANCH=MOODLE_30
+  #- php: 5.5
+  #  env: MOODLE_BRANCH=MOODLE_31_STABLE AWS_BRANCH=MOODLE_31_STABLE TOPCOLL_BRANCH=MOODLE_31
+  #- php: 5.6
+  #  env: MOODLE_BRANCH=MOODLE_29_STABLE AWS_BRANCH=LEGACY TOPCOLL_BRANCH=MOODLE_29
+  #- php: 5.6
+  #  env: MOODLE_BRANCH=MOODLE_30_STABLE AWS_BRANCH=LEGACY TOPCOLL_BRANCH=MOODLE_30
+  #- php: 5.6
+  #  env: MOODLE_BRANCH=MOODLE_31_STABLE AWS_BRANCH=MOODLE_31_STABLE TOPCOLL_BRANCH=MOODLE_31
+  #- php: 5.6
+  #  env: MOODLE_BRANCH=MOODLE_32_STABLE AWS_BRANCH=MOODLE_32_STABLE TOPCOLL_BRANCH=MOODLE_32
+  #- php: 7.0
+  #  env: MOODLE_BRANCH=MOODLE_30_STABLE AWS_BRANCH=LEGACY TOPCOLL_BRANCH=MOODLE_30
+  #- php: 7.0
+  #  env: MOODLE_BRANCH=MOODLE_31_STABLE AWS_BRANCH=MOODLE_31_STABLE TOPCOLL_BRANCH=MOODLE_31
+  #- php: 7.0
+  #  env: MOODLE_BRANCH=MOODLE_32_STABLE AWS_BRANCH=MOODLE_32_STABLE TOPCOLL_BRANCH=MOODLE_32
+  #- php: 7.1
+  #  env: MOODLE_BRANCH=MOODLE_32_STABLE AWS_BRANCH=MOODLE_32_STABLE TOPCOLL_BRANCH=MOODLE_32
 
 before_install:
   - phpenv config-rm xdebug.ini
@@ -52,7 +50,7 @@ before_install:
   - composer selfupdate
   - composer create-project -n --no-dev --prefer-dist moodlerooms/moodle-plugin-ci ci ^${MOODLE_CI_VER}
   - export PATH="$(cd ci/bin; pwd):$(cd ci/vendor/bin; pwd):$PATH"
-  - sleep 2
+  - sleep 2s
 
 install:
   - moodle-plugin-ci add-plugin -b ${AWS_BRANCH}     moodlerooms/moodle-local_aws_sdk
@@ -62,10 +60,10 @@ install:
   - moodle-plugin-ci add-plugin -b ${TOPCOLL_BRANCH} gjb2048/moodle-format_topcoll
   - moodle-plugin-ci install
 
+# We do not include behat testing for now since there are numerous issues
+# with the tests them selves that need to be resolved before doing that.
 script:
+  - moodle-plugin-ci validate
   - moodle-plugin-ci phplint
   - moodle-plugin-ci codechecker
   - moodle-plugin-ci phpunit
-  - moodle-plugin-ci validate
-  - moodle-plugin-ci mustache
-  - moodle-plugin-ci behat --moodle=${MOODLE_DIR}
