@@ -357,6 +357,8 @@ trait local_xray_29 {
     /**
      * Helper function to get top navigation node in tree.
      *
+     * TODO: add missing behat_context_helper::escape .
+     *
      * @throws ExpectationException if note not found.
      * @param string $nodetext name of top navigation node in tree.
      * @return NodeElement
@@ -574,6 +576,11 @@ trait local_xray_29 {
 
 }
 
+class behat_local_xray extends bbase_local_xray {
+
+}
+
+/*
 if ($CFG->version < 2016052300) {
 
     // Moodle 2.9 - 3.0.
@@ -591,3 +598,4 @@ if ($CFG->version < 2016052300) {
     }
 
 }
+*/

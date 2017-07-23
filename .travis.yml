@@ -55,16 +55,16 @@ before_install:
 install:
   - moodle-plugin-ci add-plugin -b ${AWS_BRANCH}     moodlerooms/moodle-local_aws_sdk
   - moodle-plugin-ci add-plugin -b ${MOODLE_BRANCH}  moodlerooms/moodle-local_mr
-  - moodle-plugin-ci add-plugin -b ${MOODLE_BRANCH}  moodlerooms/moodle-mod_hsuforum
+  #- moodle-plugin-ci add-plugin -b ${MOODLE_BRANCH}  moodlerooms/moodle-mod_hsuforum
   - moodle-plugin-ci add-plugin -b ${MOODLE_BRANCH}  moodlerooms/moodle-theme_snap
-  - moodle-plugin-ci add-plugin -b ${TOPCOLL_BRANCH} gjb2048/moodle-format_topcoll
+  #- moodle-plugin-ci add-plugin -b ${TOPCOLL_BRANCH} gjb2048/moodle-format_topcoll
   - moodle-plugin-ci install
 
 # We do not include behat testing for now since there are numerous issues
 # with the tests them selves that need to be resolved before doing that.
 script:
-  #- moodle-plugin-ci validate
-  #- moodle-plugin-ci phplint
-  #- moodle-plugin-ci codechecker
-  #- moodle-plugin-ci phpunit
-  - moodle-plugin-ci behat
+  - moodle-plugin-ci validate
+  - moodle-plugin-ci phplint
+  - moodle-plugin-ci codechecker
+  - moodle-plugin-ci phpunit
+  #- moodle-plugin-ci behat
