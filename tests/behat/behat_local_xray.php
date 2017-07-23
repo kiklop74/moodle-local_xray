@@ -39,7 +39,7 @@ use Behat\Mink\Exception\ExpectationException as ExpectationException;
  * @copyright Copyright (c) 2015 Moodlerooms Inc. (http://www.moodlerooms.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class behat_local_xray extends behat_base {
+class bbase_local_xray extends behat_base {
 
 
     public $courseshortname = '';
@@ -331,155 +331,167 @@ class behat_local_xray extends behat_base {
         }
     }
 
-    // Missing things from Moodle 2.9 and 3.0.
+}
 
-    /**
-     * Adds a discussion to the forum specified by it's name with the provided table data (usually Subject and Message). The step begins from the forum's course page.
-     *
-     * @Given /^I add a new discussion to "(?P<hsuforum_name_string>(?:[^"]|\\")*)" advanced forum with:$/
-     * @param string $forumname
-     * @param TableNode $table
-     */
-    public function i_add_a_forum_discussion_to_forum_with($forumname, TableNode $table) {
-        $this->add_new_discussion($forumname, $table, get_string('addanewtopic', 'hsuforum'));
-    }
+if ($CFG->version < 2015111600) {
 
-    /**
-     * Go to current page setting item
-     *
-     * This can be used on front page, course, category or modules pages.
-     *
-     * @Given /^I navigate to "(?P<nodetext_string>(?:[^"]|\\")*)" in current page administration$/
-     *
-     * @throws ExpectationException
-     * @param string $nodetext navigation node to click, may contain path, for example "Reports > Overview"
-     * @return void
-     */
-    public function i_navigate_to_in_current_page_administration($nodetext) {
-        $parentnodes = array_map('trim', explode('>', $nodetext));
-        // Find the name of the first category of the administration block tree.
-        $xpath = '//div[contains(@class,\'block_settings\')]//div[@id=\'settingsnav\']/ul/li[1]/p[1]/span';
-        $node = $this->find('xpath', $xpath);
-        array_unshift($parentnodes, $node->getText());
-        $lastnode = array_pop($parentnodes);
-        $this->select_node_in_navigation($lastnode, $parentnodes);
-    }
+    class behat_local_xray extends bbase_local_xray {
+        // Missing things from Moodle 2.9.
 
-    /**
-     * Checks that current page administration contains text
-     *
-     * @Given /^"(?P<element_string>(?:[^"]|\\")*)" "(?P<selector_string>[^"]*)" should exist in current page administration$/
-     *
-     * @throws ExpectationException
-     * @param string $element The locator of the specified selector.
-     *     This may be a path, for example "Subscription mode > Forced subscription"
-     * @param string $selectortype The selector type (link or text)
-     * @return void
-     */
-    public function should_exist_in_current_page_administration($element, $selectortype) {
-        $parentnodes = array_map('trim', explode('>', $element));
-        // Find the name of the first category of the administration block tree.
-        $xpath = '//div[contains(@class,\'block_settings\')]//div[@id=\'settingsnav\']/ul/li[1]/p[1]/span';
-        $node = $this->find('xpath', $xpath);
-        array_unshift($parentnodes, $node->getText());
-        $lastnode = array_pop($parentnodes);
-
-        if (!$this->find_node_in_navigation($lastnode, $parentnodes, strtolower($selectortype))) {
-            throw new ExpectationException(ucfirst($selectortype) . ' "' . $element .
-                '" not found in current page administration"', $this->getSession());
+        /**
+         * Adds a discussion to the forum specified by it's name with the provided table data (usually Subject and Message). The step begins from the forum's course page.
+         *
+         * @Given /^I add a new discussion to "(?P<hsuforum_name_string>(?:[^"]|\\")*)" Moodlerooms forum with:$/
+         * @param string $forumname
+         * @param TableNode $table
+         */
+        public function i_add_a_forum_discussion_to_forum_with($forumname, TableNode $table) {
+            $this->add_new_discussion($forumname, $table, get_string('addanewtopic', 'hsuforum'));
         }
-    }
 
-    /**
-     * Checks that current page administration contains text
-     *
-     * @Given /^"(?P<element_string>(?:[^"]|\\")*)" "(?P<selector_string>[^"]*)" should not exist in current page administration$/
-     *
-     * @throws ExpectationException
-     * @param string $element The locator of the specified selector.
-     *     This may be a path, for example "Subscription mode > Forced subscription"
-     * @param string $selectortype The selector type (link or text)
-     * @return void
-     */
-    public function should_not_exist_in_current_page_administration($element, $selectortype) {
-        $parentnodes = array_map('trim', explode('>', $element));
-        // Find the name of the first category of the administration block tree.
-        $xpath = '//div[contains(@class,\'block_settings\')]//div[@id=\'settingsnav\']/ul/li[1]/p[1]/span';
-        $node = $this->find('xpath', $xpath);
-        array_unshift($parentnodes, $node->getText());
-        $lastnode = array_pop($parentnodes);
-
-        if ($this->find_node_in_navigation($lastnode, $parentnodes, strtolower($selectortype))) {
-            throw new ExpectationException(ucfirst($selectortype) . ' "' . $element .
-                '" found in current page administration"', $this->getSession());
+        /**
+         * Go to current page setting item
+         *
+         * This can be used on front page, course, category or modules pages.
+         *
+         * @Given /^I navigate to "(?P<nodetext_string>(?:[^"]|\\")*)" in current page administration$/
+         *
+         * @throws ExpectationException
+         * @param string $nodetext navigation node to click, may contain path, for example "Reports > Overview"
+         * @return void
+         */
+        public function i_navigate_to_in_current_page_administration($nodetext) {
+            $parentnodes = array_map('trim', explode('>', $nodetext));
+            // Find the name of the first category of the administration block tree.
+            $xpath = '//div[contains(@class,\'block_settings\')]//div[@id=\'settingsnav\']/ul/li[1]/p[1]/span';
+            $node = $this->find('xpath', $xpath);
+            array_unshift($parentnodes, $node->getText());
+            $lastnode = array_pop($parentnodes);
+            $this->select_node_in_navigation($lastnode, $parentnodes);
         }
-    }
 
-    /**
-     * Finds a node in the Navigation or Administration tree
-     *
-     * @param string $nodetext
-     * @param array $parentnodes
-     * @param string $nodetype node type (link or text)
-     * @return NodeElement|null
-     * @throws ExpectationException when one of the parent nodes is not found
-     */
-    protected function find_node_in_navigation($nodetext, $parentnodes, $nodetype = 'link') {
-        // Site admin is different and needs special treatment.
-        $siteadminstr = get_string('administrationsite');
+        /**
+         * Checks that current page administration contains text
+         *
+         * @Given /^"(?P<element_string>(?:[^"]|\\")*)" "(?P<selector_string>[^"]*)" should exist in current page administration$/
+         *
+         * @throws ExpectationException
+         * @param string $element The locator of the specified selector.
+         *     This may be a path, for example "Subscription mode > Forced subscription"
+         * @param string $selectortype The selector type (link or text)
+         * @return void
+         */
+        public function should_exist_in_current_page_administration($element, $selectortype) {
+            $parentnodes = array_map('trim', explode('>', $element));
+            // Find the name of the first category of the administration block tree.
+            $xpath = '//div[contains(@class,\'block_settings\')]//div[@id=\'settingsnav\']/ul/li[1]/p[1]/span';
+            $node = $this->find('xpath', $xpath);
+            array_unshift($parentnodes, $node->getText());
+            $lastnode = array_pop($parentnodes);
 
-        // Create array of all parentnodes.
-        $countparentnode = count($parentnodes);
+            if (!$this->find_node_in_navigation($lastnode, $parentnodes, strtolower($selectortype))) {
+                throw new ExpectationException(ucfirst($selectortype) . ' "' . $element .
+                    '" not found in current page administration"', $this->getSession());
+            }
+        }
 
-        // If JS is disabled and Site administration is not expanded we
-        // should follow it, so all the lower-level nodes are available.
-        if (!$this->running_javascript()) {
-            if ($parentnodes[0] === $siteadminstr) {
-                // We don't know if there if Site admin is already expanded so
-                // don't wait, it is non-JS and we already waited for the DOM.
-                $siteadminlink = $this->getSession()->getPage()->find('named_exact', array('link', "'" . $siteadminstr . "'"));
-                if ($siteadminlink) {
-                    $siteadminlink->click();
+        /**
+         * Checks that current page administration contains text
+         *
+         * @Given /^"(?P<element_string>(?:[^"]|\\")*)" "(?P<selector_string>[^"]*)" should not exist in current page administration$/
+         *
+         * @throws ExpectationException
+         * @param string $element The locator of the specified selector.
+         *     This may be a path, for example "Subscription mode > Forced subscription"
+         * @param string $selectortype The selector type (link or text)
+         * @return void
+         */
+        public function should_not_exist_in_current_page_administration($element, $selectortype) {
+            $parentnodes = array_map('trim', explode('>', $element));
+            // Find the name of the first category of the administration block tree.
+            $xpath = '//div[contains(@class,\'block_settings\')]//div[@id=\'settingsnav\']/ul/li[1]/p[1]/span';
+            $node = $this->find('xpath', $xpath);
+            array_unshift($parentnodes, $node->getText());
+            $lastnode = array_pop($parentnodes);
+
+            if ($this->find_node_in_navigation($lastnode, $parentnodes, strtolower($selectortype))) {
+                throw new ExpectationException(ucfirst($selectortype) . ' "' . $element .
+                    '" found in current page administration"', $this->getSession());
+            }
+        }
+
+        /**
+         * Finds a node in the Navigation or Administration tree
+         *
+         * @param string $nodetext
+         * @param array $parentnodes
+         * @param string $nodetype node type (link or text)
+         * @return NodeElement|null
+         * @throws ExpectationException when one of the parent nodes is not found
+         */
+        protected function find_node_in_navigation($nodetext, $parentnodes, $nodetype = 'link') {
+            // Site admin is different and needs special treatment.
+            $siteadminstr = get_string('administrationsite');
+
+            // Create array of all parentnodes.
+            $countparentnode = count($parentnodes);
+
+            // If JS is disabled and Site administration is not expanded we
+            // should follow it, so all the lower-level nodes are available.
+            if (!$this->running_javascript()) {
+                if ($parentnodes[0] === $siteadminstr) {
+                    // We don't know if there if Site admin is already expanded so
+                    // don't wait, it is non-JS and we already waited for the DOM.
+                    $siteadminlink = $this->getSession()->getPage()->find('named_exact', array('link', "'" . $siteadminstr . "'"));
+                    if ($siteadminlink) {
+                        $siteadminlink->click();
+                    }
                 }
             }
-        }
 
-        // Get top level node.
-        $node = $this->get_top_navigation_node($parentnodes[0]);
+            // Get top level node.
+            $node = $this->get_top_navigation_node($parentnodes[0]);
 
-        // Expand all nodes.
-        for ($i = 0; $i < $countparentnode; $i++) {
-            if ($i > 0) {
-                // Sub nodes within top level node.
-                $node = $this->get_navigation_node($parentnodes[$i], $node);
-            }
+            // Expand all nodes.
+            for ($i = 0; $i < $countparentnode; $i++) {
+                if ($i > 0) {
+                    // Sub nodes within top level node.
+                    $node = $this->get_navigation_node($parentnodes[$i], $node);
+                }
 
-            // The p node contains the aria jazz.
-            $pnodexpath = "/p[contains(concat(' ', normalize-space(@class), ' '), ' tree_item ')]";
-            $pnode = $node->find('xpath', $pnodexpath);
+                // The p node contains the aria jazz.
+                $pnodexpath = "/p[contains(concat(' ', normalize-space(@class), ' '), ' tree_item ')]";
+                $pnode = $node->find('xpath', $pnodexpath);
 
-            // Keep expanding all sub-parents if js enabled.
-            if ($pnode && $this->running_javascript() && $pnode->hasAttribute('aria-expanded') &&
-                ($pnode->getAttribute('aria-expanded') == "false")) {
+                // Keep expanding all sub-parents if js enabled.
+                if ($pnode && $this->running_javascript() && $pnode->hasAttribute('aria-expanded') &&
+                    ($pnode->getAttribute('aria-expanded') == "false")) {
 
-                $this->js_trigger_click($pnode);
+                    $this->js_trigger_click($pnode);
 
-                // Wait for node to load, if not loaded before.
-                if ($pnode->hasAttribute('data-loaded') && $pnode->getAttribute('data-loaded') == "false") {
-                    $jscondition = '(document.evaluate("' . $pnode->getXpath() . '", document, null, '.
-                        'XPathResult.ANY_TYPE, null).iterateNext().getAttribute(\'data-loaded\') == "true")';
+                    // Wait for node to load, if not loaded before.
+                    if ($pnode->hasAttribute('data-loaded') && $pnode->getAttribute('data-loaded') == "false") {
+                        $jscondition = '(document.evaluate("' . $pnode->getXpath() . '", document, null, '.
+                            'XPathResult.ANY_TYPE, null).iterateNext().getAttribute(\'data-loaded\') == "true")';
 
-                    $this->getSession()->wait(self::EXTENDED_TIMEOUT * 1000, $jscondition);
+                        $this->getSession()->wait(self::EXTENDED_TIMEOUT * 1000, $jscondition);
+                    }
                 }
             }
+
+            // Finally, click on requested node under navigation.
+            $nodetextliteral = behat_context_helper::escape($nodetext);
+            $tagname = ($nodetype === 'link') ? 'a' : 'span';
+            $xpath = "/ul/li/p[contains(concat(' ', normalize-space(@class), ' '), ' tree_item ')]" .
+                "/{$tagname}[normalize-space(.)=" . $nodetextliteral . "]";
+            return $node->find('xpath', $xpath);
         }
 
-        // Finally, click on requested node under navigation.
-        $nodetextliteral = behat_context_helper::escape($nodetext);
-        $tagname = ($nodetype === 'link') ? 'a' : 'span';
-        $xpath = "/ul/li/p[contains(concat(' ', normalize-space(@class), ' '), ' tree_item ')]" .
-            "/{$tagname}[normalize-space(.)=" . $nodetextliteral . "]";
-        return $node->find('xpath', $xpath);
     }
 
+} else {
+
+    class behat_local_xray extends bbase_local_xray {
+
+    }
 }
