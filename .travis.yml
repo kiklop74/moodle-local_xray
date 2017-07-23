@@ -73,4 +73,4 @@ script:
   #- moodle-plugin-ci phplint
   #- moodle-plugin-ci codechecker
   #- moodle-plugin-ci phpunit
-  - moodle-plugin-ci behat -vvv --moodle=${MOODLE_DIR} --start-servers --auto-rerun=0
+  - moodle-plugin-ci behat -vvv --moodle=${MOODLE_DIR}
