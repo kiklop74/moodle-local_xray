@@ -37,10 +37,10 @@ matrix:
   #  env: MOODLE_BRANCH=MOODLE_32_STABLE AWS_BRANCH=MOODLE_32_STABLE TOPCOLL_BRANCH=MOODLE_32
   #- php: 7.0
   #  env: MOODLE_BRANCH=MOODLE_30_STABLE AWS_BRANCH=LEGACY TOPCOLL_BRANCH=MOODLE_30
-  #- php: 7.0
-  #  env: MOODLE_BRANCH=MOODLE_31_STABLE AWS_BRANCH=MOODLE_31_STABLE TOPCOLL_BRANCH=MOODLE_31
-  #- php: 7.0
-  #  env: MOODLE_BRANCH=MOODLE_32_STABLE AWS_BRANCH=MOODLE_32_STABLE TOPCOLL_BRANCH=MOODLE_32
+  - php: 7.0
+    env: MOODLE_BRANCH=MOODLE_31_STABLE AWS_BRANCH=MOODLE_31_STABLE TOPCOLL_BRANCH=MOODLE_31
+  - php: 7.0
+    env: MOODLE_BRANCH=MOODLE_32_STABLE AWS_BRANCH=MOODLE_32_STABLE TOPCOLL_BRANCH=MOODLE_32
   #- php: 7.1
   #  env: MOODLE_BRANCH=MOODLE_32_STABLE AWS_BRANCH=MOODLE_32_STABLE TOPCOLL_BRANCH=MOODLE_32
 
@@ -63,7 +63,8 @@ install:
 # We do not include behat testing for now since there are numerous issues
 # with the tests them selves that need to be resolved before doing that.
 script:
-  - moodle-plugin-ci validate
-  - moodle-plugin-ci phplint
-  - moodle-plugin-ci codechecker
-  - moodle-plugin-ci phpunit
+  #- moodle-plugin-ci validate
+  #- moodle-plugin-ci phplint
+  #- moodle-plugin-ci codechecker
+  #- moodle-plugin-ci phpunit
+  - moodle-plugin-ci behat
