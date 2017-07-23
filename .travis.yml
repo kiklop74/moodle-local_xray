@@ -1,3 +1,5 @@
+dist: precise
+
 language: php
 
 sudo: true
@@ -6,20 +8,12 @@ cache:
   directories:
     - $HOME/.composer/cache
 
-addons:
-  apt:
-    packages:
-#    - firefox=28.0+build2-0ubuntu2
-     - firefox
-
 env:
   global:
-    - MOODLE_START_BEHAT_SERVERS=NO
     - DB=mysqli
     - MOODLE_CI_VER=1
     - MOODLE_DIR=/home/travis/build/moodle
     - MOODLE_SELENIUM_JAR=/home/travis/build/moodle/selenium.jar
-    - MOODLE_SELENIUM3_JAR=/home/travis/build/moodle/selenium3.jar
 
 matrix:
  include:
@@ -59,7 +53,7 @@ before_install:
   - composer selfupdate
   - composer create-project -n --no-dev --prefer-dist moodlerooms/moodle-plugin-ci ci ^${MOODLE_CI_VER}
   - export PATH="$(cd ci/bin; pwd):$(cd ci/vendor/bin; pwd):$PATH"
-  - sleep 10
+  - sleep 2
 
 install:
   - moodle-plugin-ci add-plugin -b ${AWS_BRANCH}     moodlerooms/moodle-local_aws_sdk
@@ -68,17 +62,15 @@ install:
   - moodle-plugin-ci add-plugin -b ${MOODLE_BRANCH}  moodlerooms/moodle-theme_snap
   - moodle-plugin-ci add-plugin -b ${TOPCOLL_BRANCH} gjb2048/moodle-format_topcoll
   - moodle-plugin-ci install
-  - curl -L -s -o ${MOODLE_DIR}/selenium3.jar http://selenium-release.storage.googleapis.com/3.4/selenium-server-standalone-3.4.0.jar
-  - curl -L -s -o /tmp/geckodriver.tar.gz https://github.com/mozilla/geckodriver/releases/download/v0.18.0/geckodriver-v0.18.0-linux64.tar.gz
-  - sudo tar -C /usr/local/bin/ -xzf /tmp/geckodriver.tar.gz
-  #- xvfb-run -a --server-args='-screen 0 1024x768x24' java -jar ${MOODLE_SELENIUM_JAR} -log /tmp/selenium.log -Dwebdriver.firefox.bin=/usr/bin/firefox &
-  - xvfb-run -a --server-args="-screen 0 1024x768x24" java -Dwebdriver.gecko.driver=/usr/local/bin/geckodriver -Dwebdriver.firefox.bin=/usr/bin/firefox -Dwebdriver.firefox.marionette=1 -jar ${MOODLE_SELENIUM3_JAR} -log /tmp/selenium.log &
-  - php -t ${MOODLE_DIR} -S localhost:8000 > /tmp/php-access.log 2> /tmp/php-error.log &
+  #- moodle-plugin-ci add-config '$CFG->behat_profiles=["default" => ["browser" => "chrome", "wd_host" => "http://localhost:4444/wd/hub", "extensions" => ["Behat\MinkExtension" => ["selenium2" => ["browser" => "chrome"]]]]];'
   #- cd ${MOODLE_DIR}
-  - sleep 30s
+  #- php admin/tool/behat/cli/util.php --enable
+  #- xvfb-run -a --server-args="-screen 0 1024x768x24" java -Dwebdriver.chrome.driver=/usr/lib/chromium-browser/chromedriver -Dwebdriver.firefox.bin=/usr/bin/firefox -jar ${MOODLE_SELENIUM_JAR} -log /tmp/selenium.log &
+  #- php -t ${MOODLE_DIR} -S localhost:8000 > /tmp/php-access.log 2> /tmp/php-error.log &
+  #- sleep 10s
 
 script:
   #- moodle-plugin-ci phplint
   #- moodle-plugin-ci codechecker
   #- moodle-plugin-ci phpunit
-  - moodle-plugin-ci behat -vvv --moodle=${MOODLE_DIR} --auto-rerun=0
+  - moodle-plugin-ci behat -vvv --moodle=${MOODLE_DIR} --start-servers --auto-rerun=0
