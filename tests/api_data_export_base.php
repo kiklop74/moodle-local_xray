@@ -158,8 +158,8 @@ abstract class local_xray_api_data_export_base_testcase extends advanced_testcas
      */
     protected function plugin_present($component) {
         list($type, $plugin) = core_component::normalize_component($component);
-        $plugins = \core_plugin_manager::instance()->get_enabled_plugins($type);
-        return in_array($plugin, $plugins);
+        $plugins = \core_plugin_manager::instance()->get_installed_plugins($type);
+        return in_array($plugin, array_keys($plugins));
     }
 
     /**

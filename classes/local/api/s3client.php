@@ -36,6 +36,46 @@ defined('MOODLE_INTERNAL') || die();
 abstract class s3client {
 
     /**
+     * @var int
+     */
+    protected static $localxrayphpmajor = PHP_MAJOR_VERSION;
+
+    /**
+     * @var int
+     */
+    protected static $localxrayphpminor = PHP_MINOR_VERSION;
+
+    /**
+     * @param null|int $version
+     * @return int|null
+     */
+    public static function phpmajor($version = null) {
+        if ($version !== null) {
+            self::$localxrayphpmajor = $version;
+        }
+        return self::$localxrayphpmajor;
+    }
+
+    /**
+     * @param null|int $version
+     * @return int|null
+     */
+    public static function phpminor($version = null) {
+        if ($version !== null) {
+            self::$localxrayphpminor = $version;
+        }
+        return self::$localxrayphpminor;
+    }
+
+    /**
+     * @return void
+     */
+    public static function phpreset() {
+        self::$localxrayphpmajor = PHP_MAJOR_VERSION;
+        self::$localxrayphpminor = PHP_MINOR_VERSION;
+    }
+
+    /**
      * @param  null|\stdClass $config
      * @param  bool $cache
      * @return \Aws\S3\S3Client|null
@@ -61,7 +101,7 @@ abstract class s3client {
         aws_sdk::autoload();
 
         // In case of PHP 5.4.x insist on AWS SDK 2.x.
-        if ((PHP_MAJOR_VERSION == 5) and (PHP_MINOR_VERSION == 4)) {
+        if ((self::phpmajor() == 5) and (self::phpminor() == 4)) {
             if (!class_exists('\Aws\Common\Aws')) {
                 throw new \Exception('Missing AWS SDK 2.x!');
             }
@@ -84,7 +124,7 @@ abstract class s3client {
         }
 
         // In case of PHP 5.5+ insist on AWS SDK 3.x.
-        if ((PHP_MAJOR_VERSION >= 5) and (PHP_MINOR_VERSION >= 5)) {
+        if (((self::phpmajor() == 5) and (self::phpminor() >= 5)) or (self::phpmajor() > 5)) {
             if (!class_exists('\Aws\Sdk')) {
                 throw new \Exception('Missing AWS SDK 3.x!');
             }
@@ -104,6 +144,10 @@ abstract class s3client {
                 ]
             );
 
+        }
+
+        if (empty($s3cli)) {
+            throw new \Exception('Fatal error initializing!');
         }
 
         return $s3cli;
