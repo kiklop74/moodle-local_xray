@@ -29,7 +29,7 @@ class local_xray_api_s3client_testcase extends local_xray_api_data_export_base_t
             $this->markTestSkipped('Aws SDK not present!');
         }
 
-        $this->expectException('Exception');
+        $this->manage_exception('Exception');
 
         local_xray\local\api\s3client::phpmajor(5);
         local_xray\local\api\s3client::phpminor(2);
@@ -43,7 +43,7 @@ class local_xray_api_s3client_testcase extends local_xray_api_data_export_base_t
         }
 
         if ((PHP_MAJOR_VERSION != 5) and (PHP_MINOR_VERSION != 4)) {
-            $this->expectException('Exception');
+            $this->manage_exception('Exception');
         }
 
         local_xray\local\api\s3client::phpmajor(5);
@@ -58,7 +58,7 @@ class local_xray_api_s3client_testcase extends local_xray_api_data_export_base_t
         }
 
         if ((PHP_MAJOR_VERSION == 5) and (PHP_MINOR_VERSION < 5)) {
-            $this->expectException('Exception');
+            $this->manage_exception('Exception');
         }
 
         local_xray\local\api\s3client::phpmajor(5);
@@ -73,7 +73,7 @@ class local_xray_api_s3client_testcase extends local_xray_api_data_export_base_t
         }
 
         if ((PHP_MAJOR_VERSION == 5) and (PHP_MINOR_VERSION < 5)) {
-            $this->expectException('Exception');
+            $this->manage_exception('Exception');
         }
 
         local_xray\local\api\s3client::phpmajor(5);
@@ -88,7 +88,7 @@ class local_xray_api_s3client_testcase extends local_xray_api_data_export_base_t
         }
 
         if ((PHP_MAJOR_VERSION == 5) and (PHP_MINOR_VERSION < 5)) {
-            $this->expectException('Exception');
+            $this->manage_exception('Exception');
         }
 
         local_xray\local\api\s3client::phpmajor(7);
@@ -103,7 +103,7 @@ class local_xray_api_s3client_testcase extends local_xray_api_data_export_base_t
         }
 
         if ((PHP_MAJOR_VERSION == 5) and (PHP_MINOR_VERSION < 5)) {
-            $this->expectException('Exception');
+            $this->manage_exception('Exception');
         }
 
         local_xray\local\api\s3client::phpmajor(7);
