@@ -24,92 +24,50 @@ require_once(__DIR__.'/api_data_export_base.php');
  */
 class local_xray_api_s3client_testcase extends local_xray_api_data_export_base_testcase {
 
-    public function test_inits3_php52() {
-        if (!$this->plugin_present('local_aws_sdk')) {
-            $this->markTestSkipped('Aws SDK not present!');
-        }
-
-        $this->manage_exception('Exception');
-
-        local_xray\local\api\s3client::phpmajor(5);
-        local_xray\local\api\s3client::phpminor(2);
-
-        $this->assertNull(local_xray\local\api\s3client::create());
+    /**
+     * @return array
+     */
+    public function versions_provider() {
+        return [
+            [5, 2, false, true  ],
+            [5, 4, true , null  ],
+            [5, 5, true , [5, 4]],
+            [5, 6, true , [5, 4]],
+            [7, 0, true , [5, 4]],
+            [7, 1, true , [5, 4]],
+        ];
     }
 
-    public function test_inits3_php54() {
+    /**
+     * @param $major
+     * @param $minor
+     * @param $notnull
+     * @param $versions
+     *
+     * @dataProvider versions_provider
+     */
+    public function test_inits3($major, $minor, $notnull, $versions) {
         if (!$this->plugin_present('local_aws_sdk')) {
             $this->markTestSkipped('Aws SDK not present!');
         }
 
-        if ((PHP_MAJOR_VERSION != 5) and (PHP_MINOR_VERSION != 4)) {
+        if (
+            ($versions === true) or
+            (empty($versions) and (((PHP_MAJOR_VERSION == 5) and (PHP_MINOR_VERSION != 4)) or (PHP_MAJOR_VERSION > 5))) or
+            (is_array($versions) and (PHP_MAJOR_VERSION == $versions[0]) and (PHP_MINOR_VERSION <= $versions[1]))
+           ) {
             $this->manage_exception('Exception');
         }
 
-        local_xray\local\api\s3client::phpmajor(5);
-        local_xray\local\api\s3client::phpminor(4);
+        local_xray\local\api\s3client::phpmajor($major);
+        local_xray\local\api\s3client::phpminor($minor);
 
-        $this->assertNotNull(local_xray\local\api\s3client::create());
-    }
-
-    public function test_inits3_php55() {
-        if (!$this->plugin_present('local_aws_sdk')) {
-            $this->markTestSkipped('Aws SDK not present!');
+        $result = local_xray\local\api\s3client::create();
+        if ($notnull) {
+            $this->assertNotNull($result);
+        } else {
+            $this->assertNull($result);
         }
-
-        if ((PHP_MAJOR_VERSION == 5) and (PHP_MINOR_VERSION < 5)) {
-            $this->manage_exception('Exception');
-        }
-
-        local_xray\local\api\s3client::phpmajor(5);
-        local_xray\local\api\s3client::phpminor(5);
-
-        $this->assertNotNull(local_xray\local\api\s3client::create());
-    }
-
-    public function test_inits3_php56() {
-        if (!$this->plugin_present('local_aws_sdk')) {
-            $this->markTestSkipped('Aws SDK not present!');
-        }
-
-        if ((PHP_MAJOR_VERSION == 5) and (PHP_MINOR_VERSION < 5)) {
-            $this->manage_exception('Exception');
-        }
-
-        local_xray\local\api\s3client::phpmajor(5);
-        local_xray\local\api\s3client::phpminor(6);
-
-        $this->assertNotNull(local_xray\local\api\s3client::create());
-    }
-
-    public function test_inits3_php70() {
-        if (!$this->plugin_present('local_aws_sdk')) {
-            $this->markTestSkipped('Aws SDK not present!');
-        }
-
-        if ((PHP_MAJOR_VERSION == 5) and (PHP_MINOR_VERSION < 5)) {
-            $this->manage_exception('Exception');
-        }
-
-        local_xray\local\api\s3client::phpmajor(7);
-        local_xray\local\api\s3client::phpminor(0);
-
-        $this->assertNotNull(local_xray\local\api\s3client::create());
-    }
-
-    public function test_inits3_php71() {
-        if (!$this->plugin_present('local_aws_sdk')) {
-            $this->markTestSkipped('Aws SDK not present!');
-        }
-
-        if ((PHP_MAJOR_VERSION == 5) and (PHP_MINOR_VERSION < 5)) {
-            $this->manage_exception('Exception');
-        }
-
-        local_xray\local\api\s3client::phpmajor(7);
-        local_xray\local\api\s3client::phpminor(1);
-
-        $this->assertNotNull(local_xray\local\api\s3client::create());
     }
 
 }

@@ -24,6 +24,8 @@ require_once(__DIR__.'/csviterator.php');
  */
 abstract class local_xray_api_data_export_base_testcase extends advanced_testcase {
 
+    private $_expectedException = null;
+
     /**
      * @param string $pattern
      * @param string $dir
@@ -775,4 +777,18 @@ abstract class local_xray_api_data_export_base_testcase extends advanced_testcas
         }
     }
     // @codingStandardsIgnoreEnd
+
+    // @codingStandardsIgnoreStart
+    /**
+     * Providing non-existent method in Moodle 2.9.x
+     */
+    public function manage_exception($exception) {
+        if (method_exists('PHPUnit_Framework_TestCase', 'expectException')) {
+            $this->expectException($exception);
+        } else {
+            $this->setExpectedException($exception);
+        }
+    }
+    // @codingStandardsIgnoreEnd
+
 }
