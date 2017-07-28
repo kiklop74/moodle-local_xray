@@ -53,7 +53,7 @@ class local_xray_api_s3client_testcase extends local_xray_api_data_export_base_t
 
         if (
             ($versions === true) or
-            (empty($versions) and (((PHP_MAJOR_VERSION == 5) and (PHP_MINOR_VERSION != 4)) or (PHP_MAJOR_VERSION > 5))) or
+            (is_null($versions) and (((PHP_MAJOR_VERSION == 5) and (PHP_MINOR_VERSION > 4)) or (PHP_MAJOR_VERSION > 5))) or
             (is_array($versions) and (PHP_MAJOR_VERSION == 5) and (PHP_MINOR_VERSION <= 4))
            ) {
             $this->manage_exception('Exception');
