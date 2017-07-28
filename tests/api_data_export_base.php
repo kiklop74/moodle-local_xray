@@ -24,8 +24,6 @@ require_once(__DIR__.'/csviterator.php');
  */
 abstract class local_xray_api_data_export_base_testcase extends advanced_testcase {
 
-    private $_expectedException = null;
-
     /**
      * @param string $pattern
      * @param string $dir
