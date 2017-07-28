@@ -29,12 +29,12 @@ class local_xray_api_s3client_testcase extends local_xray_api_data_export_base_t
      */
     public function versions_provider() {
         return [
-            [5, 2, false, true  ],
-            [5, 4, true , null  ],
-            [5, 5, true , [5, 4]],
-            [5, 6, true , [5, 4]],
-            [7, 0, true , [5, 4]],
-            [7, 1, true , [5, 4]],
+            [5, 2, false],
+            [5, 4, true ],
+            [5, 5, true ],
+            [5, 6, true ],
+            [7, 0, true ],
+            [7, 1, true ],
         ];
     }
 
@@ -46,15 +46,14 @@ class local_xray_api_s3client_testcase extends local_xray_api_data_export_base_t
      *
      * @dataProvider versions_provider
      */
-    public function test_inits3($major, $minor, $notnull, $versions) {
+    public function test_inits3($major, $minor, $notnull) {
         if (!$this->plugin_present('local_aws_sdk')) {
             $this->markTestSkipped('Aws SDK not present!');
         }
 
         if (
-            ($versions === true) or
-            (is_null($versions) and (((PHP_MAJOR_VERSION == 5) and (PHP_MINOR_VERSION > 4)) or (PHP_MAJOR_VERSION > 5))) or
-            (is_array($versions) and (PHP_MAJOR_VERSION == 5) and (PHP_MINOR_VERSION <= 4))
+            (((PHP_MAJOR_VERSION == 5) and (PHP_MINOR_VERSION == 4)) and ((($major == 5) and ($minor > 4)) or ($major > 5))) or
+            ((((PHP_MAJOR_VERSION == 5) and (PHP_MINOR_VERSION > 4)) or (PHP_MAJOR_VERSION > 5)) and (($major == 5) and ($minor <=4)) )
            ) {
             $this->manage_exception('Exception');
         }
