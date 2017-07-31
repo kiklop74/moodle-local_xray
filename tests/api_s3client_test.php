@@ -56,7 +56,7 @@ class local_xray_api_s3client_testcase extends local_xray_api_data_export_base_t
             ( $is54 && ((($major == 5) && ($minor != 4)) || ($major > 5)) ) ||
             ( $is55plus && (($major == 5) && ($minor <= 4)) )
            ) {
-            $this->manage_exception('Exception');
+            //$this->manage_exception('Exception');
         }
 
         local_xray\local\api\s3client::phpmajor($major);
