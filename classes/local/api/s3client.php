@@ -50,8 +50,10 @@ abstract class s3client {
      * @return int|null
      */
     public static function phpmajor($version = null) {
-        if ($version !== null) {
-            self::$localxrayphpmajor = $version;
+        if (PHPUNIT_TEST) {
+            if ($version !== null) {
+                self::$localxrayphpmajor = $version;
+            }
         }
         return self::$localxrayphpmajor;
     }
@@ -61,8 +63,10 @@ abstract class s3client {
      * @return int|null
      */
     public static function phpminor($version = null) {
-        if ($version !== null) {
-            self::$localxrayphpminor = $version;
+        if (PHPUNIT_TEST) {
+            if ($version !== null) {
+                self::$localxrayphpminor = $version;
+            }
         }
         return self::$localxrayphpminor;
     }
@@ -101,7 +105,7 @@ abstract class s3client {
         aws_sdk::autoload();
 
         // In case of PHP 5.4.x insist on AWS SDK 2.x.
-        if ((self::phpmajor() == 5) and (self::phpminor() == 4)) {
+        if ((self::phpmajor() === 5) && (self::phpminor() === 4)) {
             if (!class_exists('\Aws\Common\Aws')) {
                 throw new \Exception('Missing AWS SDK 2.x!');
             }
@@ -124,7 +128,7 @@ abstract class s3client {
         }
 
         // In case of PHP 5.5+ insist on AWS SDK 3.x.
-        if (((self::phpmajor() == 5) and (self::phpminor() >= 5)) or (self::phpmajor() > 5)) {
+        if (((self::phpmajor() === 5) && (self::phpminor() >= 5)) || (self::phpmajor() > 5)) {
             if (!class_exists('\Aws\Sdk')) {
                 throw new \Exception('Missing AWS SDK 3.x!');
             }
