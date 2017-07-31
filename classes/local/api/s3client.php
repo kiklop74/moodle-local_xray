@@ -86,6 +86,7 @@ abstract class s3client {
      * @throws \Exception
      */
     public static function create($config = null, $cache = true) {
+        global $CFG;
 
         static $s3cli = null;
 
@@ -104,8 +105,16 @@ abstract class s3client {
 
         aws_sdk::autoload();
 
-        // In case of PHP 5.4.x insist on AWS SDK 2.x.
-        if ((self::phpmajor() === 5) && (self::phpminor() === 4)) {
+        $isphp54 = ((self::phpmajor() === 5) && (self::phpminor() === 4));
+        $isphp7  = ((self::phpmajor() === 7) && (self::phpminor() === 0));
+        $isphp71p = ((self::phpmajor() === 7) && (self::phpminor() >= 1));
+        $isphp557 = ((self::phpmajor() === 5) && (self::phpminor() >= 5)) || $isphp7;
+
+        // In case of PHP 5.4.x or Moodle less than 3.1 insist on AWS SDK 2.x.
+        if (
+            $isphp54 ||
+            ($isphp557 && ($CFG->version < 2016052300))
+           ) {
             if (!class_exists('\Aws\Common\Aws')) {
                 throw new \Exception('Missing AWS SDK 2.x!');
             }
@@ -127,8 +136,11 @@ abstract class s3client {
 
         }
 
-        // In case of PHP 5.5+ insist on AWS SDK 3.x.
-        if (((self::phpmajor() === 5) && (self::phpminor() >= 5)) || (self::phpmajor() > 5)) {
+        // In case of PHP 5.5+ and Moodle 3.1+ insist on AWS SDK 3.x.
+        if (
+            ($isphp557 && ($CFG->version >= 2016052300)) ||
+            ($isphp71p && ($CFG->version >= 2016120500))
+           ) {
             if (!class_exists('\Aws\Sdk')) {
                 throw new \Exception('Missing AWS SDK 3.x!');
             }

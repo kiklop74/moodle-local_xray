@@ -52,13 +52,6 @@ class local_xray_api_s3client_testcase extends local_xray_api_data_export_base_t
         $is55plus = ((PHP_MAJOR_VERSION == 5) && (PHP_MINOR_VERSION > 4)) || (PHP_MAJOR_VERSION > 5);
         $is53less = !$is54 and !$is55plus;
 
-        if (
-            ( $is54 && ((($major == 5) && ($minor != 4)) || ($major > 5)) ) ||
-            ( $is55plus && (($major == 5) && ($minor <= 4)) )
-           ) {
-            //$this->manage_exception('Exception');
-        }
-
         local_xray\local\api\s3client::phpmajor($major);
         local_xray\local\api\s3client::phpminor($minor);
 
