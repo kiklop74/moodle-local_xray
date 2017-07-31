@@ -25,38 +25,14 @@ require_once(__DIR__.'/api_data_export_base.php');
 class local_xray_api_s3client_testcase extends local_xray_api_data_export_base_testcase {
 
     /**
-     * @return array
+     * Test init of s3.
      */
-    public function versions_provider() {
-        return [
-            [5, 4],
-            [5, 5],
-            [5, 6],
-            [7, 0],
-            [7, 1]
-        ];
-    }
-
-    /**
-     * @param $major
-     * @param $minor
-     *
-     * @dataProvider versions_provider
-     */
-    public function test_inits3($major, $minor) {
+    public function test_inits3() {
         if (!$this->plugin_present('local_aws_sdk')) {
             $this->markTestSkipped('Aws SDK not present!');
         }
 
-        $is54 = (PHP_MAJOR_VERSION == 5) && (PHP_MINOR_VERSION == 4);
-        $is55plus = ((PHP_MAJOR_VERSION == 5) && (PHP_MINOR_VERSION > 4)) || (PHP_MAJOR_VERSION > 5);
-        $is53less = !$is54 and !$is55plus;
-
-        local_xray\local\api\s3client::phpmajor($major);
-        local_xray\local\api\s3client::phpminor($minor);
-
-        $result = local_xray\local\api\s3client::create();
-        $this->assertNotNull($result);
+        $this->assertNotNull(local_xray\local\api\s3client::create());
     }
 
 }
