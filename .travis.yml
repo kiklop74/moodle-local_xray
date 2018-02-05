@@ -1,4 +1,12 @@
-dist: precise
+dist: trusty
+sudo: required
+
+addons:
+  firefox: "47.0.1"
+  apt:
+    packages:
+      - oracle-java8-installer
+      - oracle-java8-set-default
 
 sudo: true
 
@@ -7,6 +15,7 @@ language: php
 cache:
   directories:
     - $HOME/.composer/cache
+    - $HOME/.npm
 
 services:
   - mysql
@@ -14,44 +23,51 @@ services:
 env:
   global:
     - DB=mysqli
-    - MOODLE_CI_VER=1
+    - MOODLE_CI_VER=2
     - AWS_BRANCH=LEGACY
 
 matrix:
  include:
   - php: 5.4
-    env: MOODLE_BRANCH=MOODLE_29_STABLE
+    env: MOODLE_BRANCH=MOODLE_29_STABLE MOODLE_CI_VER=1
   - php: 5.4
-    env: MOODLE_BRANCH=MOODLE_30_STABLE
+    env: MOODLE_BRANCH=MOODLE_30_STABLE MOODLE_CI_VER=1
   - php: 5.4
-    env: MOODLE_BRANCH=MOODLE_31_STABLE
+    env: MOODLE_BRANCH=MOODLE_31_STABLE MOODLE_CI_VER=1
   - php: 5.5
-    env: MOODLE_BRANCH=MOODLE_29_STABLE
+    env: MOODLE_BRANCH=MOODLE_29_STABLE MOODLE_CI_VER=1
   - php: 5.5
-    env: MOODLE_BRANCH=MOODLE_30_STABLE
+    env: MOODLE_BRANCH=MOODLE_30_STABLE MOODLE_CI_VER=1
   - php: 5.5
-    env: MOODLE_BRANCH=MOODLE_31_STABLE AWS_BRANCH=MOODLE_31_STABLE
+    env: MOODLE_BRANCH=MOODLE_31_STABLE AWS_BRANCH=MOODLE_31_STABLE MOODLE_CI_VER=1
   - php: 5.6
-    env: MOODLE_BRANCH=MOODLE_29_STABLE
+    env: MOODLE_BRANCH=MOODLE_29_STABLE MOODLE_CI_VER=1
   - php: 5.6
-    env: MOODLE_BRANCH=MOODLE_30_STABLE
+    env: MOODLE_BRANCH=MOODLE_30_STABLE MOODLE_CI_VER=1
   - php: 5.6
-    env: MOODLE_BRANCH=MOODLE_31_STABLE AWS_BRANCH=MOODLE_31_STABLE
+    env: MOODLE_BRANCH=MOODLE_31_STABLE AWS_BRANCH=MOODLE_31_STABLE MOODLE_CI_VER=1
   - php: 5.6
     env: MOODLE_BRANCH=MOODLE_32_STABLE AWS_BRANCH=MOODLE_32_STABLE
+  - php: 5.6
+    env: MOODLE_BRANCH=MOODLE_33_STABLE AWS_BRANCH=MOODLE_33_STABLE
   - php: 7.0
-    env: MOODLE_BRANCH=MOODLE_30_STABLE
+    env: MOODLE_BRANCH=MOODLE_30_STABLE MOODLE_CI_VER=1
   - php: 7.0
-    env: MOODLE_BRANCH=MOODLE_31_STABLE AWS_BRANCH=MOODLE_31_STABLE
+    env: MOODLE_BRANCH=MOODLE_31_STABLE AWS_BRANCH=MOODLE_31_STABLE MOODLE_CI_VER=1
   - php: 7.0
     env: MOODLE_BRANCH=MOODLE_32_STABLE AWS_BRANCH=MOODLE_32_STABLE
+  - php: 7.0
+    env: MOODLE_BRANCH=MOODLE_33_STABLE AWS_BRANCH=MOODLE_33_STABLE
   - php: 7.1
     env: MOODLE_BRANCH=MOODLE_32_STABLE AWS_BRANCH=MOODLE_32_STABLE
+  - php: 7.1
+    env: MOODLE_BRANCH=MOODLE_33_STABLE AWS_BRANCH=MOODLE_33_STABLE
 
 before_install:
   - phpenv config-rm xdebug.ini
+  - nvm install 8.9
+  - nvm use 8.9
   - cd ../..
-  - composer selfupdate
   - composer create-project -n --no-dev --prefer-dist moodlerooms/moodle-plugin-ci ci ^${MOODLE_CI_VER}
   - export PATH="$(cd ci/bin; pwd):$(cd ci/vendor/bin; pwd):$PATH"
 
