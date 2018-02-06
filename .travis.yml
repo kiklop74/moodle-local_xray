@@ -9,8 +9,6 @@ addons:
       - oracle-java8-set-default
       - chromium-chromedriver
 
-sudo: true
-
 language: php
 
 cache:
@@ -84,8 +82,8 @@ script:
   - moodle-plugin-ci validate
   - moodle-plugin-ci phplint
   - moodle-plugin-ci codechecker
-  - if [ "$MOODLE_CI_VER" = "2" ]; moodle-plugin-ci savepoints fi
-  - if [ "$MOODLE_CI_VER" = "2" ]; moodle-plugin-ci mustache fi
-  - if [ "$MOODLE_CI_VER" = "1" ]; moodle-plugin-ci csslint fi
-  - if [ "$MOODLE_CI_VER" = "2" ]; moodle-plugin-ci grunt fi
+  - if [ ${MOODLE_CI_VER} -eq 2 ] ; moodle-plugin-ci savepoints ; fi
+  - if [ ${MOODLE_CI_VER} -eq 2 ] ; moodle-plugin-ci mustache ; fi
+  - if [ ${MOODLE_CI_VER} -eq 1 ] ; moodle-plugin-ci csslint ; fi
+  - if [ ${MOODLE_CI_VER} -eq 2 ] ; moodle-plugin-ci grunt ; fi
   - moodle-plugin-ci phpunit
