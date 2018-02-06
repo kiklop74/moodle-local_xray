@@ -77,13 +77,13 @@ install:
   - moodle-plugin-ci install
 
 # We do not include behat testing for now since there are numerous issues
-# with the tests them selves that need to be resolved before doing that.
+# with the tests themselves that need to be resolved before doing that.
 script:
   - moodle-plugin-ci validate
   - moodle-plugin-ci phplint
   - moodle-plugin-ci codechecker
-  - if [ ${MOODLE_CI_VER} -eq 2 ] ; moodle-plugin-ci savepoints ; fi
-  - if [ ${MOODLE_CI_VER} -eq 2 ] ; moodle-plugin-ci mustache ; fi
-  - if [ ${MOODLE_CI_VER} -eq 1 ] ; moodle-plugin-ci csslint ; fi
-  - if [ ${MOODLE_CI_VER} -eq 2 ] ; moodle-plugin-ci grunt ; fi
+  - if [ ${MOODLE_CI_VER} -eq 2 ] ; then moodle-plugin-ci savepoints ; fi
+  - if [ ${MOODLE_CI_VER} -eq 2 ] ; then moodle-plugin-ci mustache ; fi
+  - if [ ${MOODLE_CI_VER} -eq 1 ] ; then moodle-plugin-ci csslint ; fi
+  - if [ ${MOODLE_CI_VER} -eq 2 ] ; then moodle-plugin-ci grunt ; fi
   - moodle-plugin-ci phpunit
