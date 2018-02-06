@@ -1,5 +1,5 @@
 dist: trusty
-sudo: required
+sudo: false
 
 addons:
   firefox: "47.0.1"
@@ -7,6 +7,7 @@ addons:
     packages:
       - oracle-java8-installer
       - oracle-java8-set-default
+      - chromium-chromedriver
 
 sudo: true
 
@@ -72,9 +73,9 @@ before_install:
   - export PATH="$(cd ci/bin; pwd):$(cd ci/vendor/bin; pwd):$PATH"
 
 install:
-  - moodle-plugin-ci add-plugin -b ${AWS_BRANCH}     moodlerooms/moodle-local_aws_sdk
-  - moodle-plugin-ci add-plugin -b ${MOODLE_BRANCH}  moodlerooms/moodle-local_mr
-  - moodle-plugin-ci add-plugin -b ${MOODLE_BRANCH}  moodlerooms/moodle-mod_hsuforum
+  - moodle-plugin-ci add-plugin -b ${AWS_BRANCH}    moodlerooms/moodle-local_aws_sdk
+  - moodle-plugin-ci add-plugin -b ${MOODLE_BRANCH} moodlerooms/moodle-local_mr
+  - moodle-plugin-ci add-plugin -b ${MOODLE_BRANCH} moodlerooms/moodle-mod_hsuforum
   - moodle-plugin-ci install
 
 # We do not include behat testing for now since there are numerous issues
@@ -83,4 +84,8 @@ script:
   - moodle-plugin-ci validate
   - moodle-plugin-ci phplint
   - moodle-plugin-ci codechecker
+  - if [ "$MOODLE_CI_VER" = "2" ]; moodle-plugin-ci savepoints fi
+  - if [ "$MOODLE_CI_VER" = "2" ]; moodle-plugin-ci mustache fi
+  - if [ "$MOODLE_CI_VER" = "1" ]; moodle-plugin-ci csslint fi
+  - if [ "$MOODLE_CI_VER" = "2" ]; moodle-plugin-ci grunt fi
   - moodle-plugin-ci phpunit
