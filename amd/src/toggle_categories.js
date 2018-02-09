@@ -556,9 +556,8 @@ define(['jquery', 'core/str', 'core/ajax', 'core/templates'],
 
                     $.when (
                         $.ajax({
-                            url: (
-                                self.www_root + '/local/xray/view.php'
-                            ) + '?controller=courseapi' + '&action=listcategories' + '&categoryid=' + cat.id,
+                            url: (self.www_root + '/local/xray/view.php'
+                                 ) + '?controller=courseapi' + '&action=listcategories' + '&categoryid=' + cat.id,
                             dataType: "json",
                             success: function (data) {
                                 if (!data || data.length === 0) {
@@ -572,9 +571,8 @@ define(['jquery', 'core/str', 'core/ajax', 'core/templates'],
                             }
                         }),
                         $.ajax({
-                            url: (
-                                self.www_root + '/local/xray/view.php'
-                            ) + '?controller=courseapi' + '&action=listcourses' + '&categoryid=' + cat.id,
+                            url: (self.www_root + '/local/xray/view.php'
+                                 ) + '?controller=courseapi' + '&action=listcourses' + '&categoryid=' + cat.id,
                             dataType: "json",
                             success: function (data) {
                                 if (!data || data.length === 0) {
