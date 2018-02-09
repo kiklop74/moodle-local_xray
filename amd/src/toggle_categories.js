@@ -70,7 +70,7 @@ define(['jquery', 'core/str', 'core/ajax', 'core/templates'],
                 };
 
                 self.recurseCategoryExpand = function(cat, callback) {
-                    // Load the category before clicking it to ensure that all subcategories have loaded
+                    // Load the category before clicking it to ensure that all subcategories have loaded.
                     self.toggleCategoryUI(cat, false);
                     self.loadCategory(cat, function() {
                         if (!cat.categories && !cat.courses) {
@@ -210,9 +210,9 @@ define(['jquery', 'core/str', 'core/ajax', 'core/templates'],
                         });
                     };
 
-                    // Add click handler to checks to check children when parent is checked
+                    // Add click handler to checks to check children when parent is checked.
                     $(catPrefix + cat.id).on('click', selectCategory);
-                    // Add click handler to checks to check children when parent is checked
+                    // Add click handler to checks to check children when parent is checked.
                     $(catPrefix + cat.id + '_li').on('click', expandCategory);
                 };
 
@@ -556,10 +556,9 @@ define(['jquery', 'core/str', 'core/ajax', 'core/templates'],
 
                     $.when (
                         $.ajax({
-                            url: self.www_root + '/local/xray/view.php'
-                                    + '?controller=courseapi'
-                                    + '&action=listcategories'
-                                    + '&categoryid=' + cat.id,
+                            url: (
+                                self.www_root + '/local/xray/view.php'
+                            ) + '?controller=courseapi' + '&action=listcategories' + '&categoryid=' + cat.id,
                             dataType: "json",
                             success: function (data) {
                                 if (!data || data.length === 0) {
@@ -573,10 +572,9 @@ define(['jquery', 'core/str', 'core/ajax', 'core/templates'],
                             }
                         }),
                         $.ajax({
-                            url: self.www_root + '/local/xray/view.php'
-                                    + '?controller=courseapi'
-                                    + '&action=listcourses'
-                                    + '&categoryid=' + cat.id,
+                            url: (
+                                self.www_root + '/local/xray/view.php'
+                            ) + '?controller=courseapi' + '&action=listcourses' + '&categoryid=' + cat.id,
                             dataType: "json",
                             success: function (data) {
                                 if (!data || data.length === 0) {
@@ -626,7 +624,6 @@ define(['jquery', 'core/str', 'core/ajax', 'core/templates'],
                     $(catPrefix + cat.id + '_children').empty();
                 };
 
-
                 /**
                  * Renders a los of categories in the UI
                  * @param parentCat
@@ -658,9 +655,9 @@ define(['jquery', 'core/str', 'core/ajax', 'core/templates'],
                 self.renderCategory = function(parentCat, cat) {
 
                     var catDef = $.Deferred();
-                    var categorytree =  self.rootcat.id == parentCat.id ?
-                                            self.lang_strs.xraycategory :
-                                            self.lang_strs.xraysubcategory;
+                    var categorytree = (
+                        self.rootcat.id == parentCat.id
+                    ) ? self.lang_strs.xraycategory : self.lang_strs.xraysubcategory;
                     var content = {
                         'categoryid': cat.id,
                         'categoryname': cat.name,
@@ -724,7 +721,7 @@ define(['jquery', 'core/str', 'core/ajax', 'core/templates'],
                 self.renderCourse = function(parentCat, course) {
 
                     var courseDef = $.Deferred();
-                    var courselink =  self.www_root + '/course/view.php?id=' + course.id;
+                    var courselink = self.www_root + '/course/view.php?id=' + course.id;
                     var courselabel = self.lang_strs.xraycourse;
                     var coursechecked = (course.checked ? 'checked="checked" ' : ' ');
                     var content = {
